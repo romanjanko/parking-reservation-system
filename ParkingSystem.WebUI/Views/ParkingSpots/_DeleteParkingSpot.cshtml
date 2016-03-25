@@ -1,0 +1,27 @@
+﻿@model ParkingSystem.DomainModel.Models.ParkingSpot
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title text-left" id="deleteParkingSpotModalLabel">Delete Parking Spot</h4>
+        </div>
+        
+        <form method="post" action="@Url.Action("DeleteParkingSpot", "ParkingSpots", new { id = Model.Id })"
+                data-parking-ajax="true" data-parking-target="#deleteParkingSpotModalBody">
+            <div id="deleteParkingSpotModalBody" class="modal-body text-left">
+                @Html.AntiForgeryToken()
+
+                Are you sure you want to delete parking spot @Model.Name?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>

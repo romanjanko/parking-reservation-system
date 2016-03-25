@@ -1,0 +1,56 @@
+﻿@model ParkingSystem.WebUI.Models.UserReservationsListViewModel
+
+@{
+    ViewBag.Title = "My Reservations";
+}
+
+<h4>My reservations.</h4>
+
+<div class="container">
+    <div class="row" @(Model.Reservations.Count() == 0 ? "hidden" : "" )>
+        <div class="col-sm-offset-2 col-sm-8">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Reservation Date</th>
+                        <th>Parking Spot</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reservation in Model.Reservations)
+                    {
+                        <tr>
+                            <td>
+                                @String.Format("{0:dddd, M/d/yyyy}", reservation.ReservationDate)
+                            </td>
+                            <td>
+                                @reservation.ParkingSpot.Name <small>@reservation.ParkingSpot.Type</small>
+                            </td>
+                            <td class="text-right">
+                                <button type="button" class="btn btn-danger" 
+                                    data-parking-modal="true" data-parking-href="@Url.Action("DeleteReservation", "Reservations", new { id = reservation.Id })"
+                                    data-toggle="modal" data-target="#deleteReservationModal">
+                                    <span class="fa fa-trash"></span>Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row" @(Model.PagingInfo.HidePagingNavigation() ? "hidden" : "")>
+        <div class="col-sm-offset-2 col-sm-8 text-right">
+            <nav>
+                <ul class="pagination">
+                    @Html.PageLinks(Model.PagingInfo, x => Url.Action("UserReservations", new { page = x }))
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Reservation Modal -->
+<div class="modal fade" id="deleteReservationModal" tabindex="-1" role="dialog" aria-labelledby="deleteReservationModalLabel">
+</div>

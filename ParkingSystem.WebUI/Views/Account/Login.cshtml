@@ -1,0 +1,66 @@
+﻿@model ParkingSystem.WebUI.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Log In";
+}
+
+<h4>Log in form.</h4>
+<p>
+    Enter your account's credentials to log in, or register if you don't have an account yet.
+</p>
+
+<br />
+
+<section id="loginForm">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+    
+        <div class="form-horizontal">
+            @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+            {
+                <div class="row">
+                    <div class="col-sm-offset-4 col-sm-4">
+                        @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                    </div>
+                </div>
+            }
+
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fa fa-envelope-o fa-fw"></span></span>
+                        @Html.TextBoxFor(m => m.EmailAddress,
+                                     htmlAttributes: new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = "Email address"
+                                     })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fa fa-key fa-fw"></span></span>
+                        @Html.PasswordFor(m => m.Password,
+                                      htmlAttributes: new
+                                      {
+                                          @class = "form-control",
+                                          placeholder = "Password"
+                                      })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-4">
+                    <p class="text-center">
+                        <input type="submit" value="Log in" class="btn btn-primary btn-lg" />
+                    </p>
+                    <p class="text-right">@Html.ActionLink("Register", "Register") if you don't have an account.</p>
+                    <p class="text-right">@Html.ActionLink("Forgot password?", "PasswordRecovery")</p>
+                </div>
+            </div>
+        </div>
+    }
+</section>

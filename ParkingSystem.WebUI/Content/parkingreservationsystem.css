@@ -1,0 +1,13 @@
+﻿.border-left {
+    padding: 10px 20px;
+    border-left: 5px solid #eee;
+}
+
+html, body {
+    height:100%;
+}
+
+.max-height {
+    height:80%;
+    min-height:80%;
+}

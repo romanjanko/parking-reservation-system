@@ -1,0 +1,83 @@
+﻿@using ParkingSystem.DomainModel.Models;
+
+@model ParkingSystem.WebUI.Models.ReservationsListViewModel
+
+@{
+    ViewBag.Title = "Calendar";
+}
+
+<h2 class="text-center">
+    @String.Format("{0:MMMM dd, yyyy}", Model.BusinessDatesInWeek[0]) -
+    @String.Format("{0:MMMM dd, yyyy}", Model.BusinessDatesInWeek[4])
+</h2>
+
+<nav>
+    <ul class="pager">
+        <li class="previous">
+            <a href="@Model.PreviousWeekUrl"><span>&larr;</span> Previous week</a>
+        </li>
+        <li class="next">
+            <a href="@Model.NextWeekUrl">Next week <span>&rarr;</span></a>
+        </li>
+    </ul>
+</nav>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="col-sm-2">Parking spots</th>
+
+                @for (int i = 0; i < 5; i++)
+                {
+                    <th class="col-sm-2">@String.Format("{0:ddd, M/d/yyyy}", Model.BusinessDatesInWeek[i])</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var parkingSpot in @Model.ParkingSpots.OrderBy(x => x.Type).ThenBy(x => x.Name))
+            {
+                <tr>
+                    <td>@parkingSpot.Name <br /><small>@parkingSpot.Type</small></td>
+
+                    @for (int i = 0; i < 5; i++)
+                {
+                        <td>
+                            @{
+                                Reservation reservation = Model.TryGetReservationFor(parkingSpot, Model.BusinessDatesInWeek[i]);
+                            }
+                            @if (reservation == null)
+                            {
+                                <button type="button" class="btn btn-default" data-parking-modal="true"
+                                        data-parking-href="@Url.Action("AddReservation", "Reservations", new { parkingSpotId = parkingSpot.Id, date = Model.BusinessDatesInWeek[i] })"
+                                        data-toggle="modal" data-target="#addReservationModal">
+                                    <span class="fa fa-calendar-plus-o"></span>
+                                    Reserve @parkingSpot.Name on @String.Format("{0:ddd}", Model.BusinessDatesInWeek[i])
+                                </button>
+                            }
+                            else
+                            {
+                                <div data-toggle="tooltip" data-placement="left"
+                                     title="Created on @String.Format("{0:dddd, M/d/yyyy HH:mm:ss}", reservation.CreatedDate)">
+                                    <span class="fa fa-lock"></span>
+                                    @if (reservation.ApplicationUser.UserName.CompareTo(User.Identity.Name) == 0)
+                                    {
+                                        <b>@reservation.ApplicationUser.UserNameWithoutEmailDomain</b>
+                                    }
+                                    else
+                                    {
+                                        @reservation.ApplicationUser.UserNameWithoutEmailDomain
+                                    }
+                                </div>
+                            }
+                        </td>
+                                }
+                </tr>
+                                }
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Reservation Modal -->
+<div class="modal fade" id="addReservationModal" tabindex="-1" role="dialog" aria-labelledby="addReservationModalLabel">
+</div>

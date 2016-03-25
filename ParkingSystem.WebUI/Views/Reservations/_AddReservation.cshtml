@@ -1,0 +1,44 @@
+﻿@model ParkingSystem.DomainModel.Models.Reservation
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="addReservationModalLabel">New Reservation</h4>
+        </div>
+
+        <form method="post" action="@Url.Action("AddReservation", "Reservations")"
+                data-parking-ajax="true" data-parking-target="#addReservationModalBody">
+
+            <div id="addReservationModalBody" class="modal-body">
+                @Html.AntiForgeryToken()
+
+                @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+                {
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                        </div>
+                    </div>
+                }
+
+                <div>
+                    Would you like to create a reservation for parking spot @Model.ParkingSpot.Name
+                    (@Model.ParkingSpot.Type.ToString()) on @Model.ReservationDate.ToString("dddd"), 
+                    @Model.ReservationDate.ToString("M/d/yyyy")?
+                </div>
+
+                @Html.HiddenFor(x => x.ParkingSpot.Id)
+                @Html.HiddenFor(x => x.ReservationDate)
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<h3 class="error text-center">An error occurred while processing your request.</h3>
+<h4 class="error text-center"><a href="@Url.Action("Index", "Home")">Return Home</a>.</h4>
+<br />
+<img class="img-responsive center-block" src="@Url.Content("~/Images/he-is-dead-jim-white.jpeg")" alt="Error" width="175" />

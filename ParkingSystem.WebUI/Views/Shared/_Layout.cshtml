@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - Parking Reservation System</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/parking")
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container navbar-static-top">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand">Parking Reservation System</span>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li><a href="@Url.Action("Index", "Home")"><span class="fa fa-calendar"></span> Calendar <span class="sr-only">(current)</span></a></li>
+                            <li><a href="@Url.Action("UserReservations", "Reservations")"><span class="fa fa-book"></span> My Reservations</a></li>
+                            
+                            if (User.IsInRole("Admins"))
+                            {
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="fa fa-cog"></span> Administration <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="@Url.Action("Index", "ParkingSpots")"><span class="fa fa-home"></span> Parking Spots</a></li>
+                                        <li><a href="@Url.Action("Index", "Users")"><span class="fa fa-users"></span> Users</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li><a href="@Url.Action("Register", "Account")"><span class="fa fa-user-plus"></span> Register</a></li>
+                            <li><a href="@Url.Action("Login", "Account")"><span class="fa fa-sign-in"></span> Log In</a></li>
+                        }
+                        else
+                        {
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" >@User.Identity.Name <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("ChangePassword", "Account")"><span class="fa fa-key"></span> Change Password</a></li>
+                                    <li><a href="@Url.Action("UserReservations", "Reservations")"><span class="fa fa-book"></span> My Reservations</a></li>
+                                    <li><a href="@Url.Action("Index", "Help")"><span class="fa fa-support"></span> Help</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="javascript:document.getElementById('logoutForm').submit()"><span class="fa fa-sign-out"></span> Log Out</a></li>
+                                </ul>
+                            </li>
+                        }
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+                            @Html.AntiForgeryToken()
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container body-content max-height">
+            @if (TempData.ContainsKey("messageSuccess")) /*TODO*/
+            {
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                            @TempData["messageSuccess"]
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @RenderBody()
+            <br />
+            <footer>
+                <hr />
+                <p class="text-center">&copy; @DateTime.Now.Year</p>
+            </footer>
+        </div>
+        @Scripts.Render("~/bundles/parking")
+    </body>
+</html>

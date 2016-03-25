@@ -1,0 +1,37 @@
+﻿@model ParkingSystem.DomainModel.Models.ApplicationUser
+
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title text-left" id="deleteUserModalLabel">Delete User</h4>
+        </div>
+
+        <form method="post" action="@Url.Action("DeleteUser", "Users", new { id = Model.Id })"
+              data-parking-ajax="true" data-parking-target="#deleteUserModalBody">
+            <div id="deleteUserModalBody" class="modal-body text-left">
+                @Html.AntiForgeryToken()
+
+                @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+                {
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                        </div>
+                    </div>
+                }
+
+                Are you sure you want to delete user @Model.UserName?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
