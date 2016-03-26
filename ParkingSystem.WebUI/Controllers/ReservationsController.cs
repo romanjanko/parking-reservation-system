@@ -85,6 +85,15 @@ namespace ParkingSystem.WebUI.Controllers
             };
         }
 
+        public ActionResult UserReservationsTotal()
+        {
+            var loggedApplicationUser = _applicationUserManager.FindByNameAsync(User.Identity.Name).Result;
+
+            var reservations = _reservationService.GetAllReservationsForUser(loggedApplicationUser, DateTime.Today);
+
+            return Content(reservations.Count.ToString());
+        }
+
         public ActionResult UserReservations(int page = 1)
         {
             var loggedApplicationUser = _applicationUserManager.FindByNameAsync(User.Identity.Name).Result;
