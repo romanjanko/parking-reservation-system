@@ -2,7 +2,6 @@
 using ParkingSystem.DomainModel.Models;
 using ParkingSystem.WebUI.Models;
 using System;
-using System.Linq;
 using System.Web.Mvc;
 using ParkingSystem.WebUI.Identity;
 using ParkingSystem.Core.Models;

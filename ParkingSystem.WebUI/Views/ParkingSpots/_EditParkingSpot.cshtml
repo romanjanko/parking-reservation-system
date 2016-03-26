@@ -1,4 +1,4 @@
-﻿@model ParkingSystem.DomainModel.Models.ParkingSpot
+﻿@model ParkingSystem.WebUI.Models.ParkingSpotEditViewModel
 
 <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -11,11 +11,13 @@
         </div>
 
         <form method="post" action="@Url.Action("EditParkingSpot", "ParkingSpots")"
-                data-parking-ajax="true" data-parking-target="#editParkingSpotModalBody">
+              data-parking-ajax="true" data-parking-target="#editParkingSpotModalBody">
 
             <div id="editParkingSpotModalBody" class="modal-body">
                 @Html.AntiForgeryToken()
 
+                @Html.HiddenFor(x => x.ParkingSpot.Id)
+                
                 <div class="form-horizontal">
                     @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
                     {
@@ -26,9 +28,9 @@
                         </div>
                     }
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Name, new { @class = "col-sm-4 control-label" })
+                        @Html.LabelFor(m => m.ParkingSpot.Name, new { @class = "col-sm-4 control-label" })
                         <div class="col-sm-4">
-                            @Html.TextBoxFor(m => m.Name,
+                            @Html.TextBoxFor(m => m.ParkingSpot.Name,
                                 htmlAttributes: new
                                 {
                                     @class = "form-control",
@@ -36,20 +38,16 @@
                                 })
                         </div>
                     </div>
-                    <div class="form-group"> 
-                        @Html.LabelFor(m => m.Type, new { @class = "col-sm-4 control-label" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ParkingSpot.Type, new { @class = "col-sm-4 control-label" })
                         <div class="col-sm-4">
-                            @Html.DropDownListFor(m => m.Type,
-                                        new SelectList(new object[]
-                                        {
-                                            new { Type = 0, name = "Garage" },
-                                            new { Type = 1, name = "Outside" }
-                                        }, "Type", "name", new { Type = Model.Type }),
-                                        htmlAttributes: new
-                                        {
-                                            @class = "form-control",
-                                            placeholder = "Parking spot type"
-                                        })
+                            @Html.DropDownListFor(m => m.ParkingTypeId,
+                                Model.ParkingTypes,
+                                htmlAttributes: new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Parking spot type"
+                                })
                         </div>
                     </div>
                 </div>
@@ -57,9 +55,11 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Edit
+                <button type="submit" class="btn btn-primary">
+                    Edit
                 </button>
             </div>
         </form>
+
     </div>
 </div>
