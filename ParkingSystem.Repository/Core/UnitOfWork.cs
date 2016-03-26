@@ -1,16 +1,11 @@
 ﻿using ParkingSystem.Core.RepositoryAbstraction;
 using ParkingSystem.Repository.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ParkingSystem.Repository.Core
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private ParkingSystemDbContext _context;
+        private readonly ParkingSystemDbContext _context;
 
         public UnitOfWork(ParkingSystemDbContext context)
         {

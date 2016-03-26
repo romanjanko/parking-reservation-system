@@ -78,8 +78,7 @@ namespace ParkingSystem.Repository.Repositories
         public Reservation GetReservation(ParkingSpot parkingSpot, DateTime date)
         {
             return ParkingSystemContext.Reservations
-                .Where(r => r.ParkingSpot.Id == parkingSpot.Id && r.ReservationDate == date).FirstOrDefault();
+                .FirstOrDefault(r => r.ParkingSpot.Id == parkingSpot.Id && r.ReservationDate == date);
         }
-        
     }
 }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ParkingSystem.DomainModel.Models;
 using ParkingSystem.Core.RepositoryAbstraction;
-using ParkingSystem.Core.Utils;
 using ParkingSystem.Core.Models;
 
 namespace ParkingSystem.Core.Services
@@ -52,7 +48,7 @@ namespace ParkingSystem.Core.Services
             var foundParkingSpots = _unitOfWork.ParkingSpots
                 .Find(p => p.Name == parkingSpot.Name && p.Id != parkingSpot.Id);
 
-            return foundParkingSpots.Count() > 0;
+            return foundParkingSpots.Any();
         }
 
         public void AddParkingSpot(ParkingSpot parkingSpot)
@@ -65,23 +61,26 @@ namespace ParkingSystem.Core.Services
         {
             var parkingSpot = _unitOfWork.ParkingSpots.Get(id);
 
-            if (parkingSpot != null)
-            {
-                _unitOfWork.ParkingSpots.Remove(parkingSpot);
-                _unitOfWork.SaveChanges();
-            }
+            if (parkingSpot == null)
+                return;
+
+            var reservationsForParkingSpot = _unitOfWork.Reservations.Find(r => r.ParkingSpot.Id == parkingSpot.Id);
+
+            _unitOfWork.Reservations.RemoveRange(reservationsForParkingSpot);
+            _unitOfWork.ParkingSpots.Remove(parkingSpot);
+            _unitOfWork.SaveChanges();
         }
 
         public void UpdateParkingSpot(ParkingSpot parkingSpot)
         {
             var originalParkingSpot = _unitOfWork.ParkingSpots.Get(parkingSpot.Id);
 
-            if (originalParkingSpot != null)
-            {
-                originalParkingSpot.Name = parkingSpot.Name;
-                originalParkingSpot.Type = parkingSpot.Type;
-                _unitOfWork.SaveChanges();
-            }
+            if (originalParkingSpot == null)
+                return;
+
+            originalParkingSpot.Name = parkingSpot.Name;
+            originalParkingSpot.Type = parkingSpot.Type;
+            _unitOfWork.SaveChanges();
         }
     }
 }
