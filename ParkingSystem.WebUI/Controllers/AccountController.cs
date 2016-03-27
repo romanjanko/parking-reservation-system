@@ -93,7 +93,7 @@ namespace ParkingSystem.WebUI.Controllers
 
                     _applicationUserManager.SendEmail(
                         user.Id,
-                        "Confirm your account",
+                        "[ParkingReservationSystem] Confirm your account",
                         "Please confirm your account for parking reservation system by clicking this <a href=\"" + callbackUrl + "\">link</a>.");
                     
                     return RedirectToAction("RegistrationConfirmed");
@@ -196,7 +196,7 @@ namespace ParkingSystem.WebUI.Controllers
                 
                 _applicationUserManager.SendEmail(
                     user.Id,
-                    "Reset password",
+                    "[ParkingReservationSystem] Reset password",
                     "Please reset your password for parking reservation system by clicking this <a href=\"" + callbackUrl + "\">link</a>.");
 
                 return RedirectToAction("PasswordRecoveryConfirmation");
