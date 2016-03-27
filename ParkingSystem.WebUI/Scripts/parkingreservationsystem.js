@@ -55,9 +55,14 @@
         $('[data-toggle="tooltip"]').tooltip();
     }
 
+    var initPopovers = function () {
+        $('[data-toggle="popover"]').popover();
+    }
+
     //<span class="fa fa-spinner fa-spin"></span>
 
     initButtonsForOpeningModals();
     initFormsInsideModals();
     initToolTips();
+    initPopovers();
 });

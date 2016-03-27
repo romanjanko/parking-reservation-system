@@ -1,4 +1,8 @@
-﻿.border-left {
+﻿.no-wrap {
+    white-space: nowrap;
+}
+
+.border-left {
     padding: 10px 20px;
     border-left: 5px solid #eee;
 }
