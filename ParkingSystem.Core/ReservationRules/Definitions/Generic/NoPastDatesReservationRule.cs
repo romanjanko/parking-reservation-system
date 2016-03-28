@@ -1,13 +1,12 @@
-﻿using System;
-using ParkingSystem.DomainModel.Models;
-using ParkingSystem.Core.RepositoryAbstraction;
+﻿using ParkingSystem.DomainModel.Models;
+using ParkingSystem.Core.Time;
 
 namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
     public class NoPastDatesReservationRule : AbstractReservationRule
     {
-        public NoPastDatesReservationRule()
-            : base()
+        public NoPastDatesReservationRule(ICurrentTime currentTime)
+            : base(null, null, null, currentTime)
         {
         }
 
@@ -22,7 +21,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
         private bool IsReservationBeingMadeForPastDate(Reservation reservation)
         {
-            return reservation.ReservationDate < DateTime.Today;
+            return reservation.ReservationDate.Date < CurrentTime.Now().Date;
         }
     }
 }

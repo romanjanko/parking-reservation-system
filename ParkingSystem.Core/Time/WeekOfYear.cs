@@ -1,4 +1,4 @@
-﻿namespace ParkingSystem.Core.Models
+﻿namespace ParkingSystem.Core.Time
 {
     public class WeekOfYear
     {

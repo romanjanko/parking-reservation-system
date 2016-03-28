@@ -1,7 +1,7 @@
-﻿using ParkingSystem.Core.Models;
-using System;
+﻿using System;
 using System.Text;
 using System.Web.Mvc;
+using ParkingSystem.Core.Pagination;
 
 namespace ParkingSystem.WebUI.HtmlHelpers
 {

@@ -1,10 +1,10 @@
-﻿using ParkingSystem.Core.Models;
-using ParkingSystem.DomainModel.Models;
+﻿using ParkingSystem.DomainModel.Models;
 using ParkingSystem.WebUI.Identity;
 using ParkingSystem.WebUI.Models;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using ParkingSystem.Core.Pagination;
 
 namespace ParkingSystem.WebUI.Controllers
 {
@@ -12,7 +12,7 @@ namespace ParkingSystem.WebUI.Controllers
     public class UsersController : Controller
     {
         private readonly ApplicationUserManager _applicationUserManager;
-        private readonly int pageSize = 8;
+        private readonly int _pageSize = 8;
 
         public UsersController(ApplicationUserManager applicationUserManager)
         {
@@ -25,13 +25,13 @@ namespace ParkingSystem.WebUI.Controllers
             {
                 Users = _applicationUserManager.Users
                                 .OrderBy(u => u.UserName)
-                                .Skip((page - 1) * pageSize)
-                                .Take(pageSize)
+                                .Skip((page - 1) * _pageSize)
+                                .Take(_pageSize)
                                 .ToList(),
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
-                    ItemsPerPage = pageSize,
+                    ItemsPerPage = _pageSize,
                     TotalItems = _applicationUserManager.Users.Count()
                 }
             };
@@ -74,8 +74,9 @@ namespace ParkingSystem.WebUI.Controllers
                 foreach (var error in result.Errors)
                     ModelState.AddModelError("", error);
             }
-            catch(Exception)
+            catch (Exception)
             {
+                // ignored
             }
             finally
             {

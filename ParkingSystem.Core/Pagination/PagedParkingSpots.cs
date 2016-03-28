@@ -1,7 +1,7 @@
-﻿using ParkingSystem.DomainModel.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ParkingSystem.DomainModel.Models;
 
-namespace ParkingSystem.Core.Models
+namespace ParkingSystem.Core.Pagination
 {
     public class PagedParkingSpots
     {

@@ -1,10 +1,10 @@
-﻿using ParkingSystem.Core.Models;
-using ParkingSystem.Core.RepositoryAbstraction;
-using ParkingSystem.Core.ReservationRules;
+﻿using ParkingSystem.Core.ReservationRules;
 using ParkingSystem.DomainModel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ParkingSystem.Core.AbstractRepository;
+using ParkingSystem.Core.Pagination;
 
 namespace ParkingSystem.Core.Services
 {

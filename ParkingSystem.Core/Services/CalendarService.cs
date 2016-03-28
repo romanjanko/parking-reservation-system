@@ -1,105 +1,74 @@
-﻿using ParkingSystem.Core.Models;
-using ParkingSystem.Core.Utils;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System;
+using ParkingSystem.Core.Time;
+using ParkingSystem.Core.Time.Utils;
 
 namespace ParkingSystem.Core.Services
 {
     public interface ICalendarService
     {
         DateTime GetTodayDate();
-        int GetCurrentYear();
-        int GetCurrentWeekInYear();
+        DateTime GetNow();
+
+        WeekOfYear GetCurrentWeekOfYear();
+        WeekOfYear GetPreviousWeekInYear(WeekOfYear currentWeekOfYear);
+        WeekOfYear GetNextWeekInYear(WeekOfYear currentWeekOfYear);
+
+        DatesOfBusinessDays GetDatesOfBusinessDaysInWeek(WeekOfYear weekOfYear);
 
         bool IsWeekendDay(DateTime date);
-        
-        void GetPreviousWeekInYear(int currentYear, int currentWeek, out int previousYear, out int previousWeek);
-        void GetNextWeekInYear(int currentYear, int currentWeek, out int nextYear, out int nextWeek);
-
-        IList<DateTime> GetDatesOfBusinessDaysInWeek(WeekOfYear weekOfYear);
     }
 
     public class CalendarService : ICalendarService
     {
-        private readonly Calendar _calendar;
-        private readonly IDateToWeekOfYearConvertor _dateToWeekOfYearConvertor;
-        private readonly IWeekOfYearToDateConvertor _weekOfYearToDateConvertor;
+        private readonly IWeekOfYearIterator _weekOfYearIterator;
+        private readonly ICurrentTime _currentTime;
+        private readonly IDatesOfBusinessDaysCounter _datesOfBusinessDaysCounter;
+        private readonly WeekendDayUtils _weekendDayUtils;
 
-        private DateTime _currentDate
+        public CalendarService(IWeekOfYearIterator weekOfYearIterator,
+                               ICurrentTime currentTime,
+                               IDatesOfBusinessDaysCounter datesOfBusinessDaysCounter,
+                               WeekendDayUtils weekendDayUtils)
         {
-            get
-            {
-                return DateTime.Today;
-            }
-        }
-
-        public CalendarService(IDateToWeekOfYearConvertor dateToWeekOfYearConvertor, 
-                               IWeekOfYearToDateConvertor weekOfYearToDateConvertor)
-        {
-            _calendar = CultureInfo.InvariantCulture.Calendar;
-            _dateToWeekOfYearConvertor = dateToWeekOfYearConvertor;
-            _weekOfYearToDateConvertor = weekOfYearToDateConvertor;
+            _weekOfYearIterator = weekOfYearIterator;
+            _currentTime = currentTime;
+            _datesOfBusinessDaysCounter = datesOfBusinessDaysCounter;
+            _weekendDayUtils = weekendDayUtils;
         }
 
         public DateTime GetTodayDate()
         {
-            return _currentDate;
+            return _currentTime.Now().Date;
         }
 
-        public int GetCurrentYear()
+        public DateTime GetNow()
         {
-            return _currentDate.Year;
+            return _currentTime.Now();
         }
 
-        public int GetCurrentWeekInYear()
+        public WeekOfYear GetCurrentWeekOfYear()
         {
-            int year, week;
-
-            _dateToWeekOfYearConvertor.GetWeekOfYear(_currentDate, out year, out week);
-
-            return week;
-        }
-         
-        public void GetPreviousWeekInYear(
-            int currentYear, int currentWeek, out int previousYear, out int previousWeek)
-        {
-            var mondayOfCurrentWeek = _weekOfYearToDateConvertor.GetDateForDayInWeekOfYear(
-                                            currentYear, currentWeek, DayOfWeek.Monday);
-            var mondayOfPreviousWeek = mondayOfCurrentWeek.AddDays(-7);
-            
-            _dateToWeekOfYearConvertor.GetWeekOfYear(mondayOfPreviousWeek, out previousYear, out previousWeek);
-        }
-
-        public void GetNextWeekInYear(
-            int currentYear, int currentWeek, out int nextYear, out int nextWeek)
-        {
-            var mondayOfCurrentWeek = _weekOfYearToDateConvertor.GetDateForDayInWeekOfYear(
-                                            currentYear, currentWeek, DayOfWeek.Monday);
-            var mondayOfNextWeek = mondayOfCurrentWeek.AddDays(7);
-
-            _dateToWeekOfYearConvertor.GetWeekOfYear(mondayOfNextWeek, out nextYear, out nextWeek);
+            return _weekOfYearIterator.GetCurrentWeekOfYear();
         }
         
-        public IList<DateTime> GetDatesOfBusinessDaysInWeek(WeekOfYear weekOfYear)
+        public WeekOfYear GetPreviousWeekInYear(WeekOfYear currentWeekOfYear)
         {
-            var result = new List<DateTime>
-            {
-                _weekOfYearToDateConvertor.GetDateForDayInWeekOfYear(weekOfYear.Year, weekOfYear.Week, DayOfWeek.Monday),
-                _weekOfYearToDateConvertor.GetDateForDayInWeekOfYear(weekOfYear.Year, weekOfYear.Week, DayOfWeek.Tuesday),
-                _weekOfYearToDateConvertor.GetDateForDayInWeekOfYear(weekOfYear.Year, weekOfYear.Week, DayOfWeek.Wednesday),
-                _weekOfYearToDateConvertor.GetDateForDayInWeekOfYear(weekOfYear.Year, weekOfYear.Week, DayOfWeek.Thursday),
-                _weekOfYearToDateConvertor.GetDateForDayInWeekOfYear(weekOfYear.Year, weekOfYear.Week, DayOfWeek.Friday)
-            };
+            return _weekOfYearIterator.GetPreviousWeekInYear(currentWeekOfYear);
+        }
 
-            return result.OrderBy(d => d.Date).ToList();
+        public WeekOfYear GetNextWeekInYear(WeekOfYear currentWeekOfYear)
+        {            
+            return _weekOfYearIterator.GetNextWeekInYear(currentWeekOfYear);
+        }
+        
+        public DatesOfBusinessDays GetDatesOfBusinessDaysInWeek(WeekOfYear weekOfYear)
+        {
+            return _datesOfBusinessDaysCounter.GetDatesOfBusinessDaysInWeek(weekOfYear);
         }
 
         public bool IsWeekendDay(DateTime date)
         {
-            return (date.DayOfWeek == DayOfWeek.Saturday ||
-                    date.DayOfWeek == DayOfWeek.Sunday);
+            return _weekendDayUtils.IsWeekendDay(date);
         }
     }
 }

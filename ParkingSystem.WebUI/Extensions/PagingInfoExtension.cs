@@ -1,4 +1,4 @@
-﻿using ParkingSystem.Core.Models;
+﻿using ParkingSystem.Core.Pagination;
 
 namespace ParkingSystem.WebUI.Extensions
 {

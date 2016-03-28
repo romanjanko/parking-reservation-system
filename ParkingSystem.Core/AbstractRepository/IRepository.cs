@@ -1,9 +1,8 @@
-﻿using ParkingSystem.Core.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace ParkingSystem.Core.RepositoryAbstraction
+namespace ParkingSystem.Core.AbstractRepository
 {
     public interface IRepository<TEntity> where TEntity : class
     {

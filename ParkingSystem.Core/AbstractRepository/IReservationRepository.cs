@@ -1,9 +1,9 @@
-﻿using ParkingSystem.Core.Models;
-using ParkingSystem.DomainModel.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ParkingSystem.Core.Pagination;
+using ParkingSystem.DomainModel.Models;
 
-namespace ParkingSystem.Core.RepositoryAbstraction
+namespace ParkingSystem.Core.AbstractRepository
 {
     public interface IReservationRepository : IRepository<Reservation>
     {

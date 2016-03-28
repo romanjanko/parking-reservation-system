@@ -1,13 +1,13 @@
 ﻿using System.Linq;
+using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.DomainModel.Models;
-using ParkingSystem.Core.RepositoryAbstraction;
 
 namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
     public class OneParkingSpotPerDayReservationRule : AbstractReservationRule
     {
         public OneParkingSpotPerDayReservationRule(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+            : base(unitOfWork, null, null, null)
         {
         }
 
@@ -22,7 +22,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
         private bool UserAlreadyHasReservationForSameDay(Reservation reservation)
         {
-            var userReservations = _unitOfWork.Reservations.GetAllReservationsByUser(
+            var userReservations = UnitOfWork.Reservations.GetAllReservationsByUser(
                     reservation.ApplicationUser, reservation.ReservationDate, reservation.ReservationDate);
 
             return userReservations.FirstOrDefault() != null;

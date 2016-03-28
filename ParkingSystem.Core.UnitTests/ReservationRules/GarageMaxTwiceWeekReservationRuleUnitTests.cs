@@ -1,11 +1,13 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ParkingSystem.Core.Utils;
 using ParkingSystem.DomainModel.Models;
 using ParkingSystem.Core.ReservationRules;
 using Moq;
-using ParkingSystem.Core.RepositoryAbstraction;
+using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.Core.ReservationRules.Definitions.Generic;
+using ParkingSystem.Core.Time;
+using ParkingSystem.Core.Time.Convertors;
+using ParkingSystem.Core.Time.Utils;
 
 namespace ParkingSystem.Core.UnitTests.ReservationRules
 {
@@ -14,11 +16,13 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
     {
         private readonly DateToWeekOfYearConvertor _dateToWeekOfYearConvertor;
         private readonly WeekOfYearToDateConvertor _weekOfYearToDateConvertor;
+        private readonly CurrentTimeForUtcPlusTwoHoursTimeZone _currentTime;
 
         public GarageMaxTwiceWeekReservationRuleUnitTests()
         {
             _dateToWeekOfYearConvertor = new DateToWeekOfYearConvertor();
             _weekOfYearToDateConvertor = new WeekOfYearToDateConvertor(_dateToWeekOfYearConvertor, new DayOfWeekUtils());
+            _currentTime = new CurrentTimeForUtcPlusTwoHoursTimeZone();
         }
 
         private ParkingSpot GetGarageParkingSpot()
@@ -76,7 +80,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor);
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, _currentTime);
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -118,7 +122,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor);
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, _currentTime);
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -161,7 +165,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor);
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, _currentTime);
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -203,7 +207,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor);
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, _currentTime);
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation

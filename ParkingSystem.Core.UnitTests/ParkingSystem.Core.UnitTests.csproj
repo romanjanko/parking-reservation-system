@@ -79,10 +79,10 @@
     <Compile Include="ReservationRules\GarageOnMondayOrFridayReservationRuleUnitTests.cs" />
     <Compile Include="ReservationRules\GarageMaxTwiceWeekReservationRuleUnitTests.cs" />
     <Compile Include="Services\CalendarServiceUnitTests.cs" />
-    <Compile Include="Utils\DateToWeekOfYearConvertorUnitTests.cs" />
-    <Compile Include="Utils\DayOfWeekUtilsUnitTests.cs" />
+    <Compile Include="Time\DateToWeekOfYearConvertorUnitTests.cs" />
+    <Compile Include="Time\DayOfWeekUtilsUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\WeekOfYearToDateConvertorUnitTests.cs" />
+    <Compile Include="Time\WeekOfYearToDateConvertorUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParkingSystem.Core\ParkingSystem.Core.csproj">
@@ -98,6 +98,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -1,12 +1,12 @@
-﻿using ParkingSystem.DomainModel.Models;
-using ParkingSystem.Core.RepositoryAbstraction;
+﻿using ParkingSystem.Core.AbstractRepository;
+using ParkingSystem.DomainModel.Models;
 
 namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
     public class OnlyFreeParkingSpotReservationRule : AbstractReservationRule
     {
         public OnlyFreeParkingSpotReservationRule(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+            : base(unitOfWork, null, null, null)
         {
         }
 
@@ -20,7 +20,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
         private bool IsReservationParkingSpotStillFree(Reservation reservation)
         {
-            var alreadyExistingReservation = _unitOfWork.Reservations.GetReservation(
+            var alreadyExistingReservation = UnitOfWork.Reservations.GetReservation(
                 reservation.ParkingSpot, reservation.ReservationDate);
 
             return alreadyExistingReservation == null;

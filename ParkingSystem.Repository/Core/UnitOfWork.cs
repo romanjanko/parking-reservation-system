@@ -1,4 +1,4 @@
-﻿using ParkingSystem.Core.RepositoryAbstraction;
+﻿using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.Repository.Repositories;
 
 namespace ParkingSystem.Repository.Core

@@ -7,8 +7,8 @@
 }
 
 <h2 class="text-center">
-    @String.Format("{0:MMMM dd, yyyy}", Model.BusinessDatesInWeek[0]) -
-    @String.Format("{0:MMMM dd, yyyy}", Model.BusinessDatesInWeek[4])
+    @String.Format("{0:MMMM dd, yyyy}", Model.BusinessDatesInWeek.Monday) -
+    @String.Format("{0:MMMM dd, yyyy}", Model.BusinessDatesInWeek.Friday)
 </h2>
 
 <nav>
@@ -28,7 +28,7 @@
             <tr>
                 <th>Parking spots</th>
 
-                @for (var i = 0; i < 5; i++)
+                @for (var i = 1; i <= 5; i++)
                 {
                     <th class="col-sm-2">@string.Format("{0:ddd, M/d/yyyy}", Model.BusinessDatesInWeek[i])</th>
                 }
@@ -40,7 +40,7 @@
                 <tr>
                     <td>@parkingSpot.Name <br /><small>@parkingSpot.Type</small></td>
 
-                    @for (int i = 0; i < 5; i++)
+                    @for (var i = 1; i <= 5; i++)
                 {
                         <td>
                             @{

@@ -2,17 +2,19 @@
 using Autofac.Integration.Mvc;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using ParkingSystem.Core.RepositoryAbstraction;
 using ParkingSystem.Core.ReservationRules;
 using ParkingSystem.Core.ReservationRules.Definitions;
 using ParkingSystem.Core.Services;
-using ParkingSystem.Core.Utils;
 using ParkingSystem.DomainModel.Models;
 using ParkingSystem.Repository.Core;
 using ParkingSystem.WebUI.Identity;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using ParkingSystem.Core.AbstractRepository;
+using ParkingSystem.Core.Time;
+using ParkingSystem.Core.Time.Convertors;
+using ParkingSystem.Core.Time.Utils;
 
 namespace ParkingSystem.WebUI
 {
@@ -37,7 +39,11 @@ namespace ParkingSystem.WebUI
 
             builder.RegisterType<DateToWeekOfYearConvertor>().As<IDateToWeekOfYearConvertor>().InstancePerLifetimeScope();
             builder.RegisterType<WeekOfYearToDateConvertor>().As<IWeekOfYearToDateConvertor>().InstancePerLifetimeScope();
+            builder.RegisterType<CurrentTimeForUtcPlusTwoHoursTimeZone>().As<ICurrentTime>().InstancePerLifetimeScope();
+            builder.RegisterType<DatesOfBusinessDaysCounter>().As<IDatesOfBusinessDaysCounter>().InstancePerLifetimeScope();
+            builder.RegisterType<WeekOfYearIterator>().As<IWeekOfYearIterator>().InstancePerLifetimeScope();
             builder.RegisterType<DayOfWeekUtils>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<WeekendDayUtils>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterType<ReservationRulesValidator>().As<IReservationRulesValidator>().InstancePerLifetimeScope();
             builder.RegisterType<ReservationRulesForParkingSpot>().AsSelf().InstancePerLifetimeScope();

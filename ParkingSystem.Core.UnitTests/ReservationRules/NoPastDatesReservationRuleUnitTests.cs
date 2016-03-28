@@ -3,12 +3,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ParkingSystem.Core.ReservationRules.Definitions.Generic;
 using ParkingSystem.DomainModel.Models;
 using ParkingSystem.Core.ReservationRules;
+using ParkingSystem.Core.Time;
 
 namespace ParkingSystem.Core.UnitTests.ReservationRules
 {
     [TestClass]
     public class NoPastDatesReservationRuleUnitTests
     {
+        private readonly CurrentTimeForUtcPlusTwoHoursTimeZone _currentTime;
+
+        public NoPastDatesReservationRuleUnitTests()
+        {
+            _currentTime = new CurrentTimeForUtcPlusTwoHoursTimeZone();
+        }
+
         private ParkingSpot GetGarageParkingSpot()
         {
             return new ParkingSpot
@@ -44,7 +52,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void RegularUserCanMakeReservationsForDatesEqualsToday_Garage()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -62,7 +70,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void RegularUserCanMakeReservationsForDatesEqualsToday_Outside()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -80,7 +88,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void AdminUserCanMakeReservationsForDatesEqualsToday_Garage()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -98,7 +106,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void AdminUserCanMakeReservationsForDatesEqualsToday_Outside()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -116,7 +124,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void RegularUserCanMakeReservationsForDatesGreaterToday_Garage()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -134,7 +142,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void RegularUserCanMakeReservationsForDatesGreaterToday_Outside()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -152,7 +160,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void AdminUserCanMakeReservationsForDatesGreaterToday_Garage()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -170,7 +178,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void AdminUserCanMakeReservationsForDatesGreaterToday_Outside()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -188,7 +196,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void RegularUserCannotMakeReservationsForPastDates_Garage()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -206,7 +214,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void RegularUserCannotMakeReservationsForPastDates_Outside()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -224,7 +232,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void AdminUserCanMakeReservationsForPastDates_Garage()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {
@@ -242,7 +250,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void AdminUserCanMakeReservationsForPastDates_Outside()
         {
-            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule();
+            var onlyFutureDatesReservationRule = new NoPastDatesReservationRule(_currentTime);
 
             var reservation = new Reservation
             {

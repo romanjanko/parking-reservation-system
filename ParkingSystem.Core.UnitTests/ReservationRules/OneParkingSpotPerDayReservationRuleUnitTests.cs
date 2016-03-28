@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ParkingSystem.Core.RepositoryAbstraction;
 using Moq;
+using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.DomainModel.Models;
 using ParkingSystem.Core.ReservationRules;
 using ParkingSystem.Core.ReservationRules.Definitions.Generic;

@@ -1,6 +1,6 @@
-﻿using ParkingSystem.Core.Models;
-using ParkingSystem.DomainModel.Models;
+﻿using ParkingSystem.DomainModel.Models;
 using System.Collections.Generic;
+using ParkingSystem.Core.Pagination;
 
 namespace ParkingSystem.WebUI.Models
 {

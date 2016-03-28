@@ -1,47 +1,42 @@
-﻿using ParkingSystem.Core.RepositoryAbstraction;
-using System;
-using ParkingSystem.Core.Utils;
+﻿using System;
+using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.DomainModel.Models;
-using System.Linq;
+using ParkingSystem.Core.Time;
+using ParkingSystem.Core.Time.Convertors;
 
 namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
     public abstract class AbstractReservationRule : IReservationRule
     {
-        protected readonly IUnitOfWork _unitOfWork;
-        protected readonly IDateToWeekOfYearConvertor _dateToWeekOfYearConvertor;
-        protected readonly IWeekOfYearToDateConvertor _weekOfYearToDateConvertor;
-        protected readonly DateTime _noonThreshold;
-        protected readonly int _garageLimitPerWeek;
+        protected readonly IUnitOfWork UnitOfWork;
+        protected readonly IDateToWeekOfYearConvertor DateToWeekOfYearConvertor;
+        protected readonly IWeekOfYearToDateConvertor WeekOfYearToDateConvertor;
+        protected readonly ICurrentTime CurrentTime;
+        protected readonly DateTime NoonThreshold;
+        protected readonly int GarageLimitPerWeek;
 
-        public AbstractReservationRule(IUnitOfWork unitOfWork,
-                                       IDateToWeekOfYearConvertor dateToWeekOfYearConvertor,
-                                       IWeekOfYearToDateConvertor weekOfYearToDateConvertor)
+        protected AbstractReservationRule(IUnitOfWork unitOfWork,
+                                          IDateToWeekOfYearConvertor dateToWeekOfYearConvertor,
+                                          IWeekOfYearToDateConvertor weekOfYearToDateConvertor,
+                                          ICurrentTime currentTime)
         {
-            _unitOfWork = unitOfWork;
-            _dateToWeekOfYearConvertor = dateToWeekOfYearConvertor;
-            _weekOfYearToDateConvertor = weekOfYearToDateConvertor;
-            _noonThreshold = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 12, 0, 0);
-            _garageLimitPerWeek = 2;
-        }
+            UnitOfWork = unitOfWork;
+            DateToWeekOfYearConvertor = dateToWeekOfYearConvertor;
+            WeekOfYearToDateConvertor = weekOfYearToDateConvertor;
+            CurrentTime = currentTime;
 
-        public AbstractReservationRule(IUnitOfWork unitOfWork)
-            : this(unitOfWork, null, null)
-        {
-        }
+            if (currentTime != null)
+                NoonThreshold = new DateTime(currentTime.Now().Year, currentTime.Now().Month, currentTime.Now().Day, 12, 0, 0);
 
-        public AbstractReservationRule()
-            : this(null, null, null)
-        {
+            GarageLimitPerWeek = 2;
         }
-
+        
         public abstract ReservationValidationResult Validate(Reservation reservation);
 
         protected bool IsRightTimeToRemoveAllRestrictions(Reservation reservation)
         {
-            // TODO get rid of DateTime.Today, it creates problem with unit testing
-            return reservation.ReservationDate == DateTime.Today.AddDays(1) &&
-                   reservation.CreatedDate >= _noonThreshold;
+            return reservation.ReservationDate == CurrentTime.Now().AddDays(1) &&
+                   reservation.CreatedDate >= NoonThreshold;
         }
 
         protected bool IsReservationBeingMadeForOutsideParkingSpot(Reservation reservation)
@@ -52,21 +47,19 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         protected bool IsReservationBeingMadeByAdminUser(Reservation reservation)
         {
             // TODO rework it for roles instead of hardcoded user name
-            return reservation.ApplicationUser.UserName.CompareTo("admin") == 0;
+            return string.Compare(reservation.ApplicationUser.UserName, "admin", StringComparison.Ordinal) == 0;
         }
 
         // TODO clean and move to different class
         protected void GetStartAndEndBusinessDayOfWeek(DateTime dateOfDayInWeek, out DateTime startDate, out DateTime endDate)
         {
-            if (_dateToWeekOfYearConvertor == null || _weekOfYearToDateConvertor == null)
+            if (DateToWeekOfYearConvertor == null || WeekOfYearToDateConvertor == null)
                 throw new InvalidOperationException();
 
-            int year, week;
+            var weekOfYear = DateToWeekOfYearConvertor.GetWeekOfYear(dateOfDayInWeek);
 
-            _dateToWeekOfYearConvertor.GetWeekOfYear(dateOfDayInWeek, out year, out week);
-
-            startDate = _weekOfYearToDateConvertor.GetDateForDayInWeekOfYear(year, week, DayOfWeek.Monday);
-            endDate = _weekOfYearToDateConvertor.GetDateForDayInWeekOfYear(year, week, DayOfWeek.Friday);
+            startDate = WeekOfYearToDateConvertor.GetDateForDayInWeekOfYear(weekOfYear, DayOfWeek.Monday);
+            endDate = WeekOfYearToDateConvertor.GetDateForDayInWeekOfYear(weekOfYear, DayOfWeek.Friday);
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace ParkingSystem.Core.Utils
+namespace ParkingSystem.Core.Time.Utils
 {
     public class DayOfWeekUtils
     {
         public int GetDaysOffset(DayOfWeek dayOfWeek1, DayOfWeek dayOfWeek2)
         {
-            int day1 = DayOfWeekToInt(dayOfWeek1);
-            int day2 = DayOfWeekToInt(dayOfWeek2);
+            var day1 = DayOfWeekToInt(dayOfWeek1);
+            var day2 = DayOfWeekToInt(dayOfWeek2);
 
             return day2 - day1;
         }

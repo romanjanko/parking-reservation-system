@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using ParkingSystem.Core.Time;
 
 namespace ParkingSystem.WebUI.Models
 {
     public class ReservationsListViewModel
     {
-        public IList<DateTime> BusinessDatesInWeek { get; set; }
+        public DatesOfBusinessDays BusinessDatesInWeek { get; set; }
         public IList<ParkingSpot> ParkingSpots { get; set; }
         public IList<Reservation> Reservations { get; set; }
 
@@ -17,9 +17,7 @@ namespace ParkingSystem.WebUI.Models
 
         public Reservation TryGetReservationFor(ParkingSpot parkingSpot, DateTime date)
         {
-            return Reservations
-                .Where(r => r.ParkingSpot.Id == parkingSpot.Id && r.ReservationDate == date)
-                .FirstOrDefault();
+            return Reservations.FirstOrDefault(r => r.ParkingSpot.Id == parkingSpot.Id && r.ReservationDate == date);
         }
     }
 }

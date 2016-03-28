@@ -2,9 +2,9 @@
 using System.Linq;
 using ParkingSystem.Repository.Core;
 using ParkingSystem.DomainModel.Models;
-using ParkingSystem.Core.RepositoryAbstraction;
 using System;
-using ParkingSystem.Core.Models;
+using ParkingSystem.Core.AbstractRepository;
+using ParkingSystem.Core.Pagination;
 
 namespace ParkingSystem.Repository.Repositories
 {

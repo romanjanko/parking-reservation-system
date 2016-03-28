@@ -56,14 +56,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PagedParkingSpots.cs" />
-    <Compile Include="Models\PagedReservations.cs" />
-    <Compile Include="Models\PagingInfo.cs" />
-    <Compile Include="Models\WeekOfYear.cs" />
-    <Compile Include="RepositoryAbstraction\IParkingSpotRepository.cs" />
-    <Compile Include="RepositoryAbstraction\IRepository.cs" />
-    <Compile Include="RepositoryAbstraction\IReservationRepository.cs" />
-    <Compile Include="RepositoryAbstraction\IUnitOfWork.cs" />
+    <Compile Include="Pagination\PagedParkingSpots.cs" />
+    <Compile Include="Pagination\PagedReservations.cs" />
+    <Compile Include="Pagination\PagingInfo.cs" />
+    <Compile Include="Time\DatesOfBusinessDays.cs" />
+    <Compile Include="Time\DatesOfBusinessDaysCounter.cs" />
+    <Compile Include="Time\Utils\WeekendDayUtils.cs" />
+    <Compile Include="Time\WeekOfYear.cs" />
+    <Compile Include="AbstractRepository\IParkingSpotRepository.cs" />
+    <Compile Include="AbstractRepository\IRepository.cs" />
+    <Compile Include="AbstractRepository\IReservationRepository.cs" />
+    <Compile Include="AbstractRepository\IUnitOfWork.cs" />
     <Compile Include="ReservationRules\Definitions\Generic\AbstractReservationRule.cs" />
     <Compile Include="ReservationRules\Definitions\Generic\GarageMaxTwiceWeekReservationRule.cs" />
     <Compile Include="ReservationRules\Definitions\Generic\GarageOnMondayOrFridayReservationRule.cs" />
@@ -80,9 +83,12 @@
     <Compile Include="Services\ParkingSpotService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ReservationService.cs" />
-    <Compile Include="Utils\DateToWeekOfYearConvertor.cs" />
-    <Compile Include="Utils\DayOfWeekUtils.cs" />
-    <Compile Include="Utils\WeekOfYearToDateConvertor.cs" />
+    <Compile Include="Time\CurrentTimeForUtcPlusTwoHoursTimeZone.cs" />
+    <Compile Include="Time\ICurrentTime.cs" />
+    <Compile Include="Time\Convertors\DateToWeekOfYearConvertor.cs" />
+    <Compile Include="Time\Utils\DayOfWeekUtils.cs" />
+    <Compile Include="Time\Convertors\WeekOfYearToDateConvertor.cs" />
+    <Compile Include="Time\WeekOfYearIterator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParkingSystem.DomainModel\ParkingSystem.DomainModel.csproj">

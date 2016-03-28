@@ -1,8 +1,8 @@
-﻿using ParkingSystem.Core.Models;
-using ParkingSystem.Core.Services;
+﻿using ParkingSystem.Core.Services;
 using ParkingSystem.DomainModel.Models;
 using ParkingSystem.WebUI.Models;
 using System.Web.Mvc;
+using ParkingSystem.Core.Pagination;
 
 namespace ParkingSystem.WebUI.Controllers
 {
@@ -10,7 +10,7 @@ namespace ParkingSystem.WebUI.Controllers
     public class ParkingSpotsController : Controller
     {
         private readonly IParkingSpotService _parkingSpotService;
-        private readonly int pageSize = 8;
+        private readonly int _pageSize = 8;
 
         public ParkingSpotsController(IParkingSpotService parkingSpotService)
         {
@@ -19,7 +19,7 @@ namespace ParkingSystem.WebUI.Controllers
 
         public ActionResult Index(int page = 1)
         {
-            var pagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = pageSize };
+            var pagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = _pageSize };
             var parkingSpots = _parkingSpotService.GetParkingSpots(pagingInfo);
 
             return View(

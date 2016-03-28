@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ParkingSystem.Core.RepositoryAbstraction
+namespace ParkingSystem.Core.AbstractRepository
 {
     public interface IUnitOfWork : IDisposable
     {

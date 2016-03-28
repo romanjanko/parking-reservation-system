@@ -3,8 +3,9 @@ using ParkingSystem.DomainModel.Models;
 using ParkingSystem.WebUI.Models;
 using System;
 using System.Web.Mvc;
+using ParkingSystem.Core.Pagination;
 using ParkingSystem.WebUI.Identity;
-using ParkingSystem.Core.Models;
+using ParkingSystem.Core.Time;
 
 namespace ParkingSystem.WebUI.Controllers
 {
@@ -14,7 +15,7 @@ namespace ParkingSystem.WebUI.Controllers
         private readonly IReservationService _reservationService;
         private readonly ICalendarService _calendarService;
         private readonly ApplicationUserManager _applicationUserManager;
-        private readonly int pageSize = 8;
+        private readonly int _pageSize = 8;
 
         public ReservationsController(IParkingSpotService parkingSpotService, 
                                       IReservationService reservationService, 
@@ -31,12 +32,8 @@ namespace ParkingSystem.WebUI.Controllers
         { 
             var currentWeekOfYear = GetWeekOfYearToDisplay(year, week);
 
-            int previousWeekInYear, previousYear, nextWeekInYear, nextYear;
-
-            _calendarService.GetPreviousWeekInYear(currentWeekOfYear.Year, currentWeekOfYear.Week, 
-                out previousYear, out previousWeekInYear);
-            _calendarService.GetNextWeekInYear(currentWeekOfYear.Year, currentWeekOfYear.Week, 
-                out nextYear, out nextWeekInYear);
+            var previousWeekOfYear = _calendarService.GetPreviousWeekInYear(currentWeekOfYear);
+            var nextWeekOfYear = _calendarService.GetNextWeekInYear(currentWeekOfYear);
 
             var businessDatesInCurrentWeek = _calendarService.GetDatesOfBusinessDaysInWeek(currentWeekOfYear);
 
@@ -45,51 +42,54 @@ namespace ParkingSystem.WebUI.Controllers
                 {
                     BusinessDatesInWeek = businessDatesInCurrentWeek,
                     ParkingSpots = _parkingSpotService.GetAllParkingSpots(),
-                    Reservations = _reservationService.GetAllReservationsForDateRange(businessDatesInCurrentWeek),
-                    PreviousWeekUrl = Url.Action("Calendar", new { year = previousYear, week = previousWeekInYear }),
-                    NextWeekUrl = Url.Action("Calendar", new { year = nextYear, week = nextWeekInYear })
+                    Reservations = _reservationService.GetAllReservationsForDateRange(businessDatesInCurrentWeek.ToList()),
+                    PreviousWeekUrl = Url.Action("Calendar", new
+                    {
+                        year = previousWeekOfYear.Year,
+                        week = previousWeekOfYear.Week
+                    }),
+                    NextWeekUrl = Url.Action("Calendar", new
+                    {
+                        year = nextWeekOfYear.Year,
+                        week = nextWeekOfYear.Week
+                    })
                 });
         }
 
         private WeekOfYear GetWeekOfYearToDisplay(int? year, int? week)
         {
-            int yearToDisplay, weekInYearToDisplay;
+            var weekOfYearToDisplay = new WeekOfYear();
 
             if (year == null && week == null)
             {
-                yearToDisplay = _calendarService.GetCurrentYear();
-                weekInYearToDisplay = _calendarService.GetCurrentWeekInYear();
-
+                weekOfYearToDisplay = _calendarService.GetCurrentWeekOfYear();
+                
                 var today = _calendarService.GetTodayDate();
 
                 if (_calendarService.IsWeekendDay(today))
                 {
-                    _calendarService.GetNextWeekInYear(yearToDisplay, weekInYearToDisplay,
-                        out yearToDisplay, out weekInYearToDisplay);
+                    weekOfYearToDisplay = _calendarService.GetNextWeekInYear(weekOfYearToDisplay);
                 }
             }
             else if (year != null && week != null)
             {
-                yearToDisplay = year.Value;
-                weekInYearToDisplay = week.Value;
+                weekOfYearToDisplay.Year = year.Value;
+                weekOfYearToDisplay.Week = week.Value;
             }
             else
             {
                 throw new InvalidOperationException();
             }
 
-            return new WeekOfYear
-            {
-                Week = weekInYearToDisplay,
-                Year = yearToDisplay
-            };
+            return weekOfYearToDisplay;
         }
 
         public ActionResult UserReservationsTotal()
         {
             var loggedApplicationUser = _applicationUserManager.FindByNameAsync(User.Identity.Name).Result;
 
-            var reservations = _reservationService.GetAllReservationsForUser(loggedApplicationUser, DateTime.Today);
+            var reservations = _reservationService.GetAllReservationsForUser(
+                loggedApplicationUser, _calendarService.GetTodayDate());
 
             return Content(reservations.Count.ToString());
         }
@@ -97,10 +97,10 @@ namespace ParkingSystem.WebUI.Controllers
         public ActionResult UserReservations(int page = 1)
         {
             var loggedApplicationUser = _applicationUserManager.FindByNameAsync(User.Identity.Name).Result;
-            var pagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = pageSize };
+            var pagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = _pageSize };
 
             var reservations = _reservationService.GetAllReservationsForUser(
-                pagingInfo, loggedApplicationUser, DateTime.Today);
+                pagingInfo, loggedApplicationUser, _calendarService.GetTodayDate());
 
             return View(
                 new UserReservationsListViewModel
@@ -131,7 +131,8 @@ namespace ParkingSystem.WebUI.Controllers
                 {
                     ParkingSpot = parkingSpot,
                     ApplicationUser = _applicationUserManager.FindByNameAsync(User.Identity.Name).Result,
-                    ReservationDate = reservation.ReservationDate
+                    ReservationDate = reservation.ReservationDate,
+                    CreatedDate = _calendarService.GetNow()
                 });
 
             if (reservationResult.Success)
