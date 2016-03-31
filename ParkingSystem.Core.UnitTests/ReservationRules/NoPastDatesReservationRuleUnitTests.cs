@@ -14,6 +14,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
         public NoPastDatesReservationRuleUnitTests()
         {
+            //TODO maybe it would be better to remove it
             _currentTime = new CurrentTimeForUtcPlusTwoHoursTimeZone();
         }
 

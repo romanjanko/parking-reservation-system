@@ -13,7 +13,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         public override ReservationValidationResult Validate(Reservation reservation)
         {
             if (IsReservationBeingMadeForPastDate(reservation) &&
-               !IsReservationBeingMadeByAdminUser(reservation))
+               !IsReservationMadeByAdminUser(reservation))
                 return new FailedReservationValidationResult("Reservations cannot be made for past dates.");
             else
                 return new SuccessfullReservationValidationResult();

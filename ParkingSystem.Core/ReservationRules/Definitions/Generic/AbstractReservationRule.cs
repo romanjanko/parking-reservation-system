@@ -12,7 +12,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         protected readonly IDateToWeekOfYearConvertor DateToWeekOfYearConvertor;
         protected readonly IWeekOfYearToDateConvertor WeekOfYearToDateConvertor;
         protected readonly ICurrentTime CurrentTime;
-        protected readonly DateTime NoonThreshold;
+        protected readonly TimeSpan NoonThreshold;
         protected readonly int GarageLimitPerWeek;
 
         protected AbstractReservationRule(IUnitOfWork unitOfWork,
@@ -24,10 +24,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
             DateToWeekOfYearConvertor = dateToWeekOfYearConvertor;
             WeekOfYearToDateConvertor = weekOfYearToDateConvertor;
             CurrentTime = currentTime;
-
-            if (currentTime != null)
-                NoonThreshold = new DateTime(currentTime.Now().Year, currentTime.Now().Month, currentTime.Now().Day, 12, 0, 0);
-
+            NoonThreshold = new TimeSpan(12, 0, 0);
             GarageLimitPerWeek = 2;
         }
         
@@ -35,16 +32,25 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
         protected bool IsRightTimeToRemoveAllRestrictions(Reservation reservation)
         {
-            return reservation.ReservationDate == CurrentTime.Now().AddDays(1) &&
-                   reservation.CreatedDate >= NoonThreshold;
-        }
+            //TODO write unit test for it
+            // At noon (12:00), all restrictions are removed for the following day.
 
-        protected bool IsReservationBeingMadeForOutsideParkingSpot(Reservation reservation)
+            var shiftedReservationDate = new DateTime(reservation.ReservationDate.Year, 
+                                                      reservation.ReservationDate.Month, 
+                                                      reservation.ReservationDate.Day,
+                                                      NoonThreshold.Hours, 
+                                                      NoonThreshold.Minutes, 
+                                                      NoonThreshold.Seconds).AddDays(-1);
+
+            return reservation.CreatedDate >= shiftedReservationDate;
+        }
+        
+        protected bool IsReservationMadeForOutsideParkingSpot(Reservation reservation)
         {
             return reservation.ParkingSpot.Type == ParkingSpotType.Outside;
         }
 
-        protected bool IsReservationBeingMadeByAdminUser(Reservation reservation)
+        protected bool IsReservationMadeByAdminUser(Reservation reservation)
         {
             // TODO rework it for roles instead of hardcoded user name
             return string.Compare(reservation.ApplicationUser.UserName, "admin", StringComparison.Ordinal) == 0;

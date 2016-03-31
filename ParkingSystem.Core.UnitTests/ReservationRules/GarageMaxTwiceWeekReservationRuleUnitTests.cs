@@ -16,13 +16,11 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
     {
         private readonly DateToWeekOfYearConvertor _dateToWeekOfYearConvertor;
         private readonly WeekOfYearToDateConvertor _weekOfYearToDateConvertor;
-        private readonly CurrentTimeForUtcPlusTwoHoursTimeZone _currentTime;
 
         public GarageMaxTwiceWeekReservationRuleUnitTests()
         {
             _dateToWeekOfYearConvertor = new DateToWeekOfYearConvertor();
             _weekOfYearToDateConvertor = new WeekOfYearToDateConvertor(_dateToWeekOfYearConvertor, new DayOfWeekUtils());
-            _currentTime = new CurrentTimeForUtcPlusTwoHoursTimeZone();
         }
 
         private ParkingSpot GetGarageParkingSpot()
@@ -79,13 +77,19 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var mockedUnitOfWork = new Mock<IUnitOfWork>();
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
+            var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0);
+
+            var mockedCurrentTime = new Mock<ICurrentTime>();
+            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
+
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, _currentTime);
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
                 {
                     ReservationDate = new DateTime(2016, 3, 25),
+                    CreatedDate = reservationCreatedDate,
                     ParkingSpot = GetGarageParkingSpot(),
                     ApplicationUser = GetRegularUser()
                 });
@@ -121,25 +125,29 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var mockedUnitOfWork = new Mock<IUnitOfWork>();
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
+            var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0);
+
+            var mockedCurrentTime = new Mock<ICurrentTime>();
+            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
+
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, _currentTime);
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
                 {
                     ReservationDate = new DateTime(2016, 3, 25),
+                    CreatedDate = reservationCreatedDate,
                     ParkingSpot = GetGarageParkingSpot(),
                     ApplicationUser = GetRegularUser()
                 });
 
             Assert.IsInstanceOfType(result, typeof(FailedReservationValidationResult));
         }
-
-
+        
         [TestMethod]
         public void RegularUserCanReserveOutsideUnlimitedlyInSameWeek()
         {
-
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
                 .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
@@ -164,13 +172,19 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var mockedUnitOfWork = new Mock<IUnitOfWork>();
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
+            var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0);
+
+            var mockedCurrentTime = new Mock<ICurrentTime>();
+            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
+
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, _currentTime);
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
                 {
                     ReservationDate = new DateTime(2016, 3, 25),
+                    CreatedDate = reservationCreatedDate,
                     ParkingSpot = GetOutsideParkingSpot(),
                     ApplicationUser = GetRegularUser()
                 });
@@ -181,7 +195,6 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         [TestMethod]
         public void AdminUserCanReserveGarageMoreThanTwiceInSameWeek()
         {
-
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
                 .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
@@ -206,20 +219,263 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var mockedUnitOfWork = new Mock<IUnitOfWork>();
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
+            var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0);
+
+            var mockedCurrentTime = new Mock<ICurrentTime>();
+            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
+
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, _currentTime);
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
                 {
                     ReservationDate = new DateTime(2016, 3, 25),
+                    CreatedDate = reservationCreatedDate,
                     ParkingSpot = GetGarageParkingSpot(),
                     ApplicationUser = GetAdminUser()
                 });
 
             Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
         }
+        
+        [TestMethod]
+        public void RegularUserCanReserveGarageMoreThanTwiceInSameWeekAfterNoonThreshold()
+        {
+            var mockedReservationRepository = new Mock<IReservationRepository>();
+            mockedReservationRepository
+                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                                                          new DateTime(2016, 3, 21),/* Monday */
+                                                          new DateTime(2016, 3, 25) /* Friday */))
+                .Returns(new Reservation[]
+                {
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 22),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 23),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                });
 
-        //TODO add test for noon "threshold"
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+            mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
+
+            var reservationCreatedDate = new DateTime(2016, 3, 24, 12, 0, 0); /* Thursday, 12:00 (just after threshold) */
+
+            var mockedCurrentTime = new Mock<ICurrentTime>();
+            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
+
+            var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+
+            var result = garageMaxTwiceWeekReservationRule.Validate(
+                new Reservation
+                {
+                    ReservationDate = new DateTime(2016, 3, 25, 10, 0, 0), /* Friday, 10:00 (time shouldn't be important here) */
+                    CreatedDate = reservationCreatedDate,
+                    ParkingSpot = GetGarageParkingSpot(),
+                    ApplicationUser = GetRegularUser()
+                });
+
+            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+        }
+
+        [TestMethod]
+        public void RegularUserCannotReserveGarageMoreThanTwiceInSameWeekJustBeforeNoonThreshold()
+        {
+
+            var mockedReservationRepository = new Mock<IReservationRepository>();
+            mockedReservationRepository
+                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                                                          new DateTime(2016, 3, 21),/* Monday */
+                                                          new DateTime(2016, 3, 25) /* Friday */))
+                .Returns(new Reservation[]
+                {
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 22),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 23),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                });
+
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+            mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
+
+            var reservationCreatedDate = new DateTime(2016, 3, 24, 11, 59, 59); /* Thursday, 11:59:59 (just before threshold) */
+
+            var mockedCurrentTime = new Mock<ICurrentTime>();
+            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
+
+            var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+
+            var result = garageMaxTwiceWeekReservationRule.Validate(
+                new Reservation
+                {
+                    ReservationDate = new DateTime(2016, 3, 25, 10, 0, 0), /* Friday, 10:00 (time shouldn't be important here) */
+                    CreatedDate = reservationCreatedDate,
+                    ParkingSpot = GetGarageParkingSpot(),
+                    ApplicationUser = GetRegularUser()
+                });
+
+            Assert.IsInstanceOfType(result, typeof(FailedReservationValidationResult));
+        }
+
+        [TestMethod]
+        public void RegularUserCannotReserveGarageMoreThanTwiceInSameWeekLongBeforeNoonThreshold()
+        {
+
+            var mockedReservationRepository = new Mock<IReservationRepository>();
+            mockedReservationRepository
+                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                                                          new DateTime(2016, 3, 21),/* Monday */
+                                                          new DateTime(2016, 3, 25) /* Friday */))
+                .Returns(new Reservation[]
+                {
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 22),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 23),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                });
+
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+            mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
+
+            var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0); /* Wednesday, 13:00 (long before threshold) */
+
+            var mockedCurrentTime = new Mock<ICurrentTime>();
+            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
+
+            var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+
+            var result = garageMaxTwiceWeekReservationRule.Validate(
+                new Reservation
+                {
+                    ReservationDate = new DateTime(2016, 3, 25, 10, 0, 0), /* Friday, 10:00 (time shouldn't be important here) */
+                    CreatedDate = reservationCreatedDate,
+                    ParkingSpot = GetGarageParkingSpot(),
+                    ApplicationUser = GetRegularUser()
+                });
+
+            Assert.IsInstanceOfType(result, typeof(FailedReservationValidationResult));
+        }
+
+        [TestMethod]
+        public void RegularUserCanReserveGarageMoreThanTwiceInSameWeekLongAfterNoonThreshold_1()
+        {
+
+            var mockedReservationRepository = new Mock<IReservationRepository>();
+            mockedReservationRepository
+                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                                                          new DateTime(2016, 3, 21),/* Monday */
+                                                          new DateTime(2016, 3, 25) /* Friday */))
+                .Returns(new Reservation[]
+                {
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 22),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 23),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                });
+
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+            mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
+
+            var reservationCreatedDate = new DateTime(2016, 3, 25, 13, 0, 0); /* Friday, 13:00 (long after threshold) */
+
+            var mockedCurrentTime = new Mock<ICurrentTime>();
+            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
+
+            var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+
+            var result = garageMaxTwiceWeekReservationRule.Validate(
+                new Reservation
+                {
+                    ReservationDate = new DateTime(2016, 3, 25, 10, 0, 0), /* Friday, 10:00 (time shouldn't be important here) */
+                    CreatedDate = reservationCreatedDate,
+                    ParkingSpot = GetGarageParkingSpot(),
+                    ApplicationUser = GetRegularUser()
+                });
+
+            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+        }
+
+        [TestMethod]
+        public void RegularUserCanReserveGarageMoreThanTwiceInSameWeekLongAfterNoonThreshold_2()
+        {
+
+            var mockedReservationRepository = new Mock<IReservationRepository>();
+            mockedReservationRepository
+                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                                                          new DateTime(2016, 3, 21),/* Monday */
+                                                          new DateTime(2016, 3, 25) /* Friday */))
+                .Returns(new Reservation[]
+                {
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 22),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                    new Reservation
+                    {
+                        ReservationDate = new DateTime(2016, 3, 23),
+                        ParkingSpot = GetGarageParkingSpot(),
+                        ApplicationUser = GetRegularUser()
+                    },
+                });
+
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+            mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
+
+            var reservationCreatedDate = new DateTime(2016, 3, 26, 11, 0, 0); /* Saturday, 11:00 (long after threshold) */
+
+            var mockedCurrentTime = new Mock<ICurrentTime>();
+            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
+
+            var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
+                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+
+            var result = garageMaxTwiceWeekReservationRule.Validate(
+                new Reservation
+                {
+                    ReservationDate = new DateTime(2016, 3, 25, 10, 0, 0), /* Friday, 10:00 (time shouldn't be important here) */
+                    CreatedDate = reservationCreatedDate,
+                    ParkingSpot = GetGarageParkingSpot(),
+                    ApplicationUser = GetRegularUser()
+                });
+
+            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+        }
     }
 }

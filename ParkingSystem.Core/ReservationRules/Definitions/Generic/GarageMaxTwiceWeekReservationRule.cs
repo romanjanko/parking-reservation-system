@@ -20,8 +20,8 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         public override ReservationValidationResult Validate(Reservation reservation)
         {
             if (IsRightTimeToRemoveAllRestrictions(reservation) ||
-                IsReservationBeingMadeForOutsideParkingSpot(reservation) ||
-                IsReservationBeingMadeByAdminUser(reservation))
+                IsReservationMadeForOutsideParkingSpot(reservation) ||
+                IsReservationMadeByAdminUser(reservation))
                 return new SuccessfullReservationValidationResult();
 
             var userInGarageCount = GetUserGarageUsageInWeek(reservation.ApplicationUser, reservation.ReservationDate);

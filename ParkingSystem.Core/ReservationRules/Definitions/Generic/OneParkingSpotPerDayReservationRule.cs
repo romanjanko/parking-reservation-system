@@ -14,7 +14,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         public override ReservationValidationResult Validate(Reservation reservation)
         {
             if (UserAlreadyHasReservationForSameDay(reservation) &&
-               !IsReservationBeingMadeByAdminUser(reservation))
+               !IsReservationMadeByAdminUser(reservation))
                 return new FailedReservationValidationResult("You already have a reservation for the same day.");
             else
                 return new SuccessfullReservationValidationResult();
