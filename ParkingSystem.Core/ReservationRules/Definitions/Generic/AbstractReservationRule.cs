@@ -33,8 +33,6 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         protected bool IsRightTimeToRemoveAllRestrictions(Reservation reservation)
         {
             //TODO write unit test for it
-            // At noon (12:00), all restrictions are removed for the following day.
-
             var shiftedReservationDate = new DateTime(reservation.ReservationDate.Year, 
                                                       reservation.ReservationDate.Month, 
                                                       reservation.ReservationDate.Day,
@@ -56,7 +54,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
             return string.Compare(reservation.ApplicationUser.UserName, "admin", StringComparison.Ordinal) == 0;
         }
 
-        // TODO clean and move to different class
+        // TODO clean and move to different class, get rid of out keyword
         protected void GetStartAndEndBusinessDayOfWeek(DateTime dateOfDayInWeek, out DateTime startDate, out DateTime endDate)
         {
             if (DateToWeekOfYearConvertor == null || WeekOfYearToDateConvertor == null)

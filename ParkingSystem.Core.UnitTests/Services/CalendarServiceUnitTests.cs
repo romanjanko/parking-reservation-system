@@ -11,7 +11,7 @@ namespace ParkingSystem.Core.UnitTests.Services
     public class CalendarServiceUnitTests
     {
         private readonly DateToWeekOfYearConvertor _dateToWeekOfYearConvertor;
-        private readonly CurrentTimeForUtcPlusTwoHoursTimeZone _currentTime;
+        private readonly CurrentTimeForCentralEuropeTimeZone _currentTime;
         private readonly WeekOfYearIterator _weekOfYearIterator;
         private readonly DatesOfBusinessDaysCounter _datesOfBusinessDaysCounter;
         private readonly WeekendDayUtils _weekendDayUtils;
@@ -20,7 +20,7 @@ namespace ParkingSystem.Core.UnitTests.Services
         {
             _dateToWeekOfYearConvertor = new DateToWeekOfYearConvertor();
             var dayOfWeekUtils = new DayOfWeekUtils();
-            _currentTime = new CurrentTimeForUtcPlusTwoHoursTimeZone();
+            _currentTime = new CurrentTimeForCentralEuropeTimeZone();
             _weekendDayUtils = new WeekendDayUtils();
 
             var weekOfYearToDateConvertor = new WeekOfYearToDateConvertor(_dateToWeekOfYearConvertor, dayOfWeekUtils);

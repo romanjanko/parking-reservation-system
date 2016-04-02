@@ -2,7 +2,7 @@
 
 namespace ParkingSystem.Core.Time
 {
-    public class CurrentTimeForUtcPlusTwoHoursTimeZone : ICurrentTime
+    public class CurrentTimeForCentralEuropeTimeZone : ICurrentTime
     {
         public DateTime Now()
         {

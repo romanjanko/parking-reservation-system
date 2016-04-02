@@ -39,7 +39,7 @@ namespace ParkingSystem.WebUI
 
             builder.RegisterType<DateToWeekOfYearConvertor>().As<IDateToWeekOfYearConvertor>().InstancePerLifetimeScope();
             builder.RegisterType<WeekOfYearToDateConvertor>().As<IWeekOfYearToDateConvertor>().InstancePerLifetimeScope();
-            builder.RegisterType<CurrentTimeForUtcPlusTwoHoursTimeZone>().As<ICurrentTime>().InstancePerLifetimeScope();
+            builder.RegisterType<CurrentTimeForCentralEuropeTimeZone>().As<ICurrentTime>().InstancePerLifetimeScope();
             builder.RegisterType<DatesOfBusinessDaysCounter>().As<IDatesOfBusinessDaysCounter>().InstancePerLifetimeScope();
             builder.RegisterType<WeekOfYearIterator>().As<IWeekOfYearIterator>().InstancePerLifetimeScope();
             builder.RegisterType<DayOfWeekUtils>().AsSelf().InstancePerLifetimeScope();

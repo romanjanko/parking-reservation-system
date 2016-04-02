@@ -83,7 +83,7 @@
     <Compile Include="Services\ParkingSpotService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ReservationService.cs" />
-    <Compile Include="Time\CurrentTimeForUtcPlusTwoHoursTimeZone.cs" />
+    <Compile Include="Time\CurrentTimeForCentralEuropeTimeZone.cs" />
     <Compile Include="Time\ICurrentTime.cs" />
     <Compile Include="Time\Convertors\DateToWeekOfYearConvertor.cs" />
     <Compile Include="Time\Utils\DayOfWeekUtils.cs" />

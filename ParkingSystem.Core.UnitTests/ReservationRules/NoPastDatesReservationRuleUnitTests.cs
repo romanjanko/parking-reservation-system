@@ -10,12 +10,12 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
     [TestClass]
     public class NoPastDatesReservationRuleUnitTests
     {
-        private readonly CurrentTimeForUtcPlusTwoHoursTimeZone _currentTime;
+        private readonly CurrentTimeForCentralEuropeTimeZone _currentTime;
 
         public NoPastDatesReservationRuleUnitTests()
         {
             //TODO maybe it would be better to remove it
-            _currentTime = new CurrentTimeForUtcPlusTwoHoursTimeZone();
+            _currentTime = new CurrentTimeForCentralEuropeTimeZone();
         }
 
         private ParkingSpot GetGarageParkingSpot()
