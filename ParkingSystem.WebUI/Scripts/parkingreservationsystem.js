@@ -56,7 +56,17 @@
     }
 
     var initPopovers = function () {
-        $('[data-toggle="popover"]').popover();
+        $('[data-toggle="popover"]').popover({
+            html: true,
+            content: function () {
+                var $popover = $(this);
+                var $popoverContent = $popover.find('#popover-content-wrapper');
+
+                return $popoverContent.html();
+            }
+        }).on('shown.bs.popover', function() {
+            initButtonsForOpeningModals();
+        });
     }
 
     //<span class="fa fa-spinner fa-spin"></span>

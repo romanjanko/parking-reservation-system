@@ -1,0 +1,44 @@
+﻿@model ParkingSystem.WebUI.Models.ReservationDetailsViewModel
+
+<table class="reservation-details-table">
+    <tbody>
+    <tr>
+        <td>
+            Reservation date:
+        </td>
+        <td>
+            @String.Format("{0:dddd, M/d/yyyy}", Model.Reservation.ReservationDate)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Parking spot:
+        </td>
+        <td>
+            @Model.Reservation.ParkingSpot.Name (@Model.Reservation.ParkingSpot.Type)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Created date:
+        </td>
+        <td>
+            @String.Format("{0:dddd, M/d/yyyy HH:mm:ss}", Model.Reservation.CreatedDate)
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+@if (Model.CanLoggedUserDeleteReservation)
+{
+    <br/>
+    <div class="text-center">
+        <button type="button" class="btn btn-danger" data-parking-modal="true"
+                data-parking-href="@Url.Action("DeleteReservation", "Reservations", new {id = Model.Reservation.Id})"
+                data-toggle="modal" data-target="#deleteReservationModal">
+            <span class="fa fa-trash"></span>Delete
+        </button>
+    </div>
+}
+
+

@@ -180,5 +180,20 @@ namespace ParkingSystem.WebUI.Controllers
 
             return Json(new { success = true });
         }
+
+        public ActionResult ReservationDetails(int id)
+        {
+            var loggedApplicationUser = _applicationUserManager.FindByNameAsync(User.Identity.Name).Result;
+            var reservation = _reservationService.GetReservation(id);
+
+            var model = new ReservationDetailsViewModel
+            {
+                Reservation = reservation,
+                CanLoggedUserDeleteReservation = _reservationService.CanBeReservationDeletedByUser(
+                    loggedApplicationUser, reservation)
+            };
+
+            return PartialView("_ReservationDetails", model);
+        }
     }
 }

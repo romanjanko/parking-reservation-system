@@ -295,6 +295,7 @@
     <Compile Include="Models\ParkingSpotsListViewModel.cs" />
     <Compile Include="Models\PasswordResetViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
+    <Compile Include="Models\ReservationDetailsViewModel.cs" />
     <Compile Include="Models\UserReservationsListViewModel.cs" />
     <Compile Include="Models\ReservationsListViewModel.cs" />
     <Compile Include="Models\PasswordRecoveryViewModel.cs" />
@@ -398,6 +399,7 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <Content Include="Views\Users\_DeleteUser.cshtml" />
+    <Content Include="Views\Reservations\_ReservationDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

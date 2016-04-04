@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.Core.Pagination;
+using ParkingSystem.Core.Time;
 
 namespace ParkingSystem.Core.Services
 {
@@ -16,6 +17,8 @@ namespace ParkingSystem.Core.Services
         PagedReservations GetAllReservationsForUser(PagingInfo pagination, ApplicationUser user, DateTime fromDate);
 
         ReservationValidationResult AddReservation(Reservation reservation);
+
+        bool CanBeReservationDeletedByUser(ApplicationUser user, Reservation reservation);
         void DeleteReservation(int id);
     }
 
@@ -23,11 +26,15 @@ namespace ParkingSystem.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReservationRulesValidator _reservationRulesValidator;
+        private readonly ICurrentTime _currentTime;
 
-        public ReservationService(IUnitOfWork unitOfWork, IReservationRulesValidator reservationRulesValidator)
+        public ReservationService(IUnitOfWork unitOfWork, 
+                                  IReservationRulesValidator reservationRulesValidator, 
+                                  ICurrentTime currentTime)
         {
             _unitOfWork = unitOfWork;
             _reservationRulesValidator = reservationRulesValidator;
+            _currentTime = currentTime;
         }
 
         public Reservation GetReservation(int id)
@@ -66,15 +73,32 @@ namespace ParkingSystem.Core.Services
             return validationResult;
         }
 
+        public bool CanBeReservationDeletedByUser(ApplicationUser user, Reservation reservation)
+        {
+            if (IsPastReservation(reservation)) return false;
+
+            return IsReservationCreatedByUser(user, reservation) ||
+                   user.IsUserAdmin();
+        }
+
+        private bool IsPastReservation(Reservation reservation)
+        {
+            return reservation.ReservationDate.Date < _currentTime.Now().Date;
+        }
+        
+        private bool IsReservationCreatedByUser(ApplicationUser user, Reservation reservation)
+        {
+            return string.Compare(reservation.ApplicationUser.UserName, user.UserName, StringComparison.Ordinal) == 0;
+        }
+
         public void DeleteReservation(int id)
         {
             var reservation = _unitOfWork.Reservations.Get(id);
 
-            if (reservation != null)
-            {
-                _unitOfWork.Reservations.Remove(reservation);
-                _unitOfWork.SaveChanges();
-            }
+            if (reservation == null) return;
+
+            _unitOfWork.Reservations.Remove(reservation);
+            _unitOfWork.SaveChanges();
         }
     }
 }

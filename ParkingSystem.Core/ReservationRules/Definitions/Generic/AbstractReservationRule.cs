@@ -50,8 +50,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
         protected bool IsReservationMadeByAdminUser(Reservation reservation)
         {
-            // TODO rework it for roles instead of hardcoded user name
-            return string.Compare(reservation.ApplicationUser.UserName, "admin", StringComparison.Ordinal) == 0;
+            return reservation.ApplicationUser.IsUserAdmin();
         }
 
         // TODO clean and move to different class, get rid of out keyword

@@ -41,7 +41,7 @@
                     <td>@parkingSpot.Name <br /><small>@parkingSpot.Type</small></td>
 
                     @for (var i = 1; i <= 5; i++)
-                {
+                    {
                         <td>
                             @{
                                 Reservation reservation = Model.TryGetReservationFor(parkingSpot, Model.BusinessDatesInWeek[i]);
@@ -57,10 +57,14 @@
                             }
                             else
                             {
-                                <div class="no-wrap" data-container="body" tabindex="0" data-trigger="focus" data-toggle="popover" data-placement="top" title="Reservation details"
-                                     data-content="Created on @String.Format("{0:dddd, M/d/yyyy HH:mm:ss}", reservation.CreatedDate).">
+                                <div class="no-wrap" tabindex="0" data-trigger="focus" data-toggle="popover"
+                                     data-placement="auto top" title="Reservation details">
+                                    <div id="popover-content-wrapper" class="hidden">
+                                        @{Html.RenderAction("ReservationDetails", "Reservations", new { id = reservation.Id });}
+                                    </div>
+
                                     <span class="fa fa-lock"></span>
-                                    @if (String.Compare(reservation.ApplicationUser.UserName, User.Identity.Name, StringComparison.Ordinal) == 0)
+                                    @if (string.Compare(reservation.ApplicationUser.UserName, User.Identity.Name, StringComparison.Ordinal) == 0)
                                     {
                                         <b>@reservation.ApplicationUser.UserNameWithoutEmailDomain</b>
                                     }
@@ -68,16 +72,21 @@
                                     {
                                         @reservation.ApplicationUser.UserNameWithoutEmailDomain
                                     }
+                                    <sup><span class="fa fa-info-circle"></span></sup>
                                 </div>
                             }
                         </td>
                                 }
                 </tr>
-                                }
+            }
         </tbody>
     </table>
 </div>
 
 <!-- Add Reservation Modal -->
 <div class="modal fade" id="addReservationModal" tabindex="-1" role="dialog" aria-labelledby="addReservationModalLabel">
+</div>
+
+<!-- Delete Reservation Modal -->
+<div class="modal fade" id="deleteReservationModal" tabindex="-1" role="dialog" aria-labelledby="deleteReservationModalLabel">
 </div>

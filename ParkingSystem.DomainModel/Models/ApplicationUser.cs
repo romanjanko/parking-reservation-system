@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ParkingSystem.DomainModel.Models
 {
@@ -13,17 +14,13 @@ namespace ParkingSystem.DomainModel.Models
         {
             get
             {
-                int index = UserName.IndexOf('@');
+                var index = UserName.IndexOf('@');
 
-                if (index >= 0)
-                {
-                    return UserName.Substring(0, index).ToLowerInvariant();
-                }
-                else
-                {
-                    return UserName.ToLowerInvariant();
-                }
+                return index >= 0 ? UserName.Substring(0, index).ToLowerInvariant() : UserName.ToLowerInvariant();
             }
         }
+
+        // TODO rework it for roles instead of hardcoded user name
+        public bool IsUserAdmin() => string.Compare(UserName, "admin", StringComparison.Ordinal) == 0;
     }
 }
