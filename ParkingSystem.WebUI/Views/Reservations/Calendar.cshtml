@@ -57,8 +57,7 @@
                             }
                             else
                             {
-                                <div class="no-wrap" tabindex="0" data-trigger="focus" data-toggle="popover"
-                                     data-placement="auto top" title="Reservation details">
+                                <div class="no-wrap" data-toggle="popover" data-placement="auto top" title="Reservation details">
                                     <div id="popover-content-wrapper" class="hidden">
                                         @{Html.RenderAction("ReservationDetails", "Reservations", new { id = reservation.Id });}
                                     </div>

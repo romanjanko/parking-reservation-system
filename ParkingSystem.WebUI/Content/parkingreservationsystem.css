@@ -19,3 +19,7 @@ html, body {
 .reservation-details-table td {
     vertical-align: top;
 }
+
+.popover {
+    z-index: 1040;
+}
