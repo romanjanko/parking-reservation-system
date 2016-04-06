@@ -4,10 +4,16 @@ namespace ParkingSystem.Core.Time
 {
     public class CurrentTimeForCentralEuropeTimeZone : ICurrentTime
     {
+        private TimeZoneInfo CentralEuropeTimeZoneInfo { get; set; }
+
+        public CurrentTimeForCentralEuropeTimeZone()
+        {
+            CentralEuropeTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+        }
+
         public DateTime Now()
         {
-            //TODO +2 during summer time, +1 during winter time? check and fix
-            return DateTime.UtcNow.AddHours(2);
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, CentralEuropeTimeZoneInfo);
         }
     }
 }
