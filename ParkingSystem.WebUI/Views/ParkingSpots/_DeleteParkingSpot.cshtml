@@ -15,6 +15,11 @@
             <div id="deleteParkingSpotModalBody" class="modal-body text-left">
                 @Html.AntiForgeryToken()
 
+                <div class="alert alert-danger" role="alert">
+                    <strong>Warning!</strong>
+                    By deleting this parking spot you also delete all reservations linked with it.
+                </div>
+
                 Are you sure you want to delete parking spot @Model.Name?
             </div>
 
