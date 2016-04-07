@@ -65,7 +65,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -101,7 +101,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -119,7 +119,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -137,7 +137,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -155,7 +155,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -173,7 +173,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -191,7 +191,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -209,7 +209,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(FailedReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(FailedReservation));
         }
 
         [TestMethod]
@@ -227,7 +227,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(FailedReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(FailedReservation));
         }
 
         [TestMethod]
@@ -245,7 +245,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -263,7 +263,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var result = onlyFutureDatesReservationRule.Validate(reservation);
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
     }
 }

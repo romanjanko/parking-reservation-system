@@ -23,7 +23,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
             if (IsRightTimeToRemoveAllRestrictions(reservation) ||
                 IsReservationMadeForOutsideParkingSpot(reservation) ||
                 IsReservationMadeByAdminUser(reservation))
-                return new SuccessfullReservationValidationResult();
+                return new SuccessfullGarageReservationAfterLimitExpiration();
                         
             var userReservationsInGarage = GetUserReservationsInGarageForWeek(
                 reservation.ApplicationUser, reservation.ReservationDate);
@@ -35,7 +35,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
                 if (garageReservationOnFriday != null)
                 {
-                    return new FailedReservationValidationResult(@"You can sign up for either Monday or Friday in garage.
+                    return new FailedReservation(@"You can sign up for either Monday or Friday in garage.
                         A reservation for Friday was already made.");
                 }
             }
@@ -46,12 +46,12 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
                 if (garageReservationOnMonday != null)
                 {
-                    return new FailedReservationValidationResult(@"You can sign up for either Monday or Friday in garage. 
+                    return new FailedReservation(@"You can sign up for either Monday or Friday in garage. 
                         A reservation for Monday was already made.");
                 }
             }
 
-            return new SuccessfullReservationValidationResult();
+            return new SuccessfullGarageReservationBeforeLimitExpiration();
         }
 
         private bool IsReservationForMonday(Reservation reservation)
@@ -71,7 +71,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
             GetStartAndEndBusinessDayOfWeek(dateOfDayInWeek, out startDateOfWeek, out endDateOfWeek);
 
-            return UnitOfWork.Reservations.GetGarageReservationsByUser(user, startDateOfWeek, endDateOfWeek);
+            return UnitOfWork.Reservations.GetNonFreeGarageReservationsByUser(user, startDateOfWeek, endDateOfWeek);
         }
     }
 }

@@ -64,8 +64,11 @@ namespace ParkingSystem.Core.Services
         {
             var validationResult = _reservationRulesValidator.Validate(reservation);
             
-            if (validationResult.Success)
+            if (validationResult.Valid)
             {
+                if (validationResult.FreeReservation)
+                    reservation.ReservedFreely = true;
+
                 _unitOfWork.Reservations.Add(reservation);
                 _unitOfWork.SaveChanges();
             }

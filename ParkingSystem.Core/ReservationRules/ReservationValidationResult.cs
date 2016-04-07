@@ -1,30 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ParkingSystem.Core.ReservationRules
+﻿namespace ParkingSystem.Core.ReservationRules
 {
+    //TODO
     public abstract class ReservationValidationResult
     {
-        public bool Success { get; set; }
+        public bool Valid { get; set; }
+        public bool FreeReservation { get; set; }
         public string ErrorMessage { get; set; }
     }
 
-    public class SuccessfullReservationValidationResult : ReservationValidationResult
+    public class FailedReservation : ReservationValidationResult
     {
-        public SuccessfullReservationValidationResult()
+        public FailedReservation(string error)
         {
-            Success = true;
+            Valid = false;
+            ErrorMessage = error;
         }
     }
 
-    public class FailedReservationValidationResult : ReservationValidationResult
+    public class SuccessfullCommonReservation : ReservationValidationResult
     {
-        public FailedReservationValidationResult(string error)
+        public SuccessfullCommonReservation()
         {
-            Success = false;
-            ErrorMessage = error;
+            Valid = true;
+            FreeReservation = true;
+        }
+    }
+    
+    public class SuccessfullGarageReservationBeforeLimitExpiration : ReservationValidationResult
+    {
+
+        public SuccessfullGarageReservationBeforeLimitExpiration()
+        {
+            Valid = true;
+            FreeReservation = false;
+        }
+    }
+
+    public class SuccessfullGarageReservationAfterLimitExpiration : ReservationValidationResult
+    {
+
+        public SuccessfullGarageReservationAfterLimitExpiration()
+        {
+            Valid = true;
+            FreeReservation = true;
         }
     }
 }

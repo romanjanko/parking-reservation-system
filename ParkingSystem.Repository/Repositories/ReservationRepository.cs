@@ -67,10 +67,11 @@ namespace ParkingSystem.Repository.Repositories
                             r.ApplicationUser.Id == user.Id).ToList();
         }
 
-        public IList<Reservation> GetGarageReservationsByUser(ApplicationUser user, DateTime fromDate, DateTime toDate)
+        public IList<Reservation> GetNonFreeGarageReservationsByUser(ApplicationUser user, DateTime fromDate, DateTime toDate)
         {
             return ParkingSystemContext.Reservations
                 .Where(r => r.ReservationDate >= fromDate && r.ReservationDate <= toDate &&
+                            r.ReservedFreely == false &&
                             r.ApplicationUser.Id == user.Id &&
                             r.ParkingSpot.Type == ParkingSpotType.Garage).ToList();
         }

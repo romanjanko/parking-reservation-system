@@ -22,15 +22,25 @@ namespace ParkingSystem.Core.ReservationRules
             foreach (var rule in rules)
                 validationResults.Add(rule.Validate(reservation));
 
-            var firstValidationError = validationResults.Where(r => r.Success == false).FirstOrDefault();
+            var firstValidationError = validationResults.FirstOrDefault(r => !r.Valid);
 
             if (firstValidationError != null)
-            {
                 return firstValidationError;
+            
+            //TODO
+            if (reservation.ParkingSpot.Type == ParkingSpotType.Garage)
+            {
+                var garageReservedBeforeNoonThreshold = validationResults.FirstOrDefault(r => r.Valid && !r.FreeReservation);
+                var garageReservedAfterNoonThreshold = validationResults.FirstOrDefault(r => r.Valid && r.FreeReservation);
+
+                if (garageReservedBeforeNoonThreshold != null)
+                    return new SuccessfullGarageReservationBeforeLimitExpiration();
+                else
+                    return new SuccessfullGarageReservationAfterLimitExpiration();
             }
             else
             {
-                return new SuccessfullReservationValidationResult();
+                return new SuccessfullCommonReservation();
             }
         }
     }

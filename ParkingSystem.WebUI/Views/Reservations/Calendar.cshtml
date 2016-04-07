@@ -71,11 +71,19 @@
                                     {
                                         @reservation.ApplicationUser.UserNameWithoutEmailDomain
                                     }
-                                    <sup><span class="fa fa-info-circle"></span></sup>
+                                    <sup><span class="fa fa-info-circle" data-toggle="tooltip" data-placement="auto top" title="Click for more information."></span></sup>
+
+                                    @if (reservation.ParkingSpot.Type == ParkingSpotType.Garage && reservation.ReservedFreely)
+                                    {
+                                        <sup>
+                                            <span class="fa fa-star" data-toggle="tooltip" data-placement="auto top" 
+                                                  title="Reserved freely."></span>
+                                        </sup>
+                                    }
                                 </div>
-                            }
+                                            }
                         </td>
-                                }
+                                            }
                 </tr>
             }
         </tbody>

@@ -74,7 +74,7 @@
     <Compile Include="ReservationRules\Definitions\Generic\OnlyFreeParkingSpotReservationRule.cs" />
     <Compile Include="ReservationRules\Definitions\Generic\NoPastDatesReservationRule.cs" />
     <Compile Include="ReservationRules\Definitions\ReservationRulesForParkingSpot.cs" />
-    <Compile Include="ReservationRules\Definitions\Generic\IReservationRulesValidator.cs" />
+    <Compile Include="ReservationRules\IReservationRulesValidator.cs" />
     <Compile Include="ReservationRules\Definitions\Generic\OneParkingSpotPerDayReservationRule.cs" />
     <Compile Include="ReservationRules\ReservationRulesValidator.cs" />
     <Compile Include="ReservationRules\ReservationValidationResult.cs" />

@@ -15,9 +15,9 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         {
             if (UserAlreadyHasReservationForSameDay(reservation) &&
                !IsReservationMadeByAdminUser(reservation))
-                return new FailedReservationValidationResult("You already have a reservation for the same day.");
+                return new FailedReservation("You already have a reservation for the same day.");
             else
-                return new SuccessfullReservationValidationResult();
+                return new SuccessfullCommonReservation();
         }
 
         private bool UserAlreadyHasReservationForSameDay(Reservation reservation)

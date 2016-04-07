@@ -14,9 +14,9 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         {
             if (IsReservationBeingMadeForPastDate(reservation) &&
                !IsReservationMadeByAdminUser(reservation))
-                return new FailedReservationValidationResult("Reservations cannot be made for past dates.");
+                return new FailedReservation("Reservations cannot be made for past dates.");
             else
-                return new SuccessfullReservationValidationResult();
+                return new SuccessfullCommonReservation();
         }
 
         private bool IsReservationBeingMadeForPastDate(Reservation reservation)

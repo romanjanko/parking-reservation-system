@@ -61,7 +61,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
-                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                .Setup(m => m.GetNonFreeGarageReservationsByUser(It.IsAny<ApplicationUser>(),
                                                           new DateTime(2016, 3, 21),/* Monday */
                                                           new DateTime(2016, 3, 25) /* Friday */))
                 .Returns(new Reservation[]
@@ -94,7 +94,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
-                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                .Setup(m => m.GetNonFreeGarageReservationsByUser(It.IsAny<ApplicationUser>(),
                                                           new DateTime(2016, 3, 21),/* Monday */
                                                           new DateTime(2016, 3, 25) /* Friday */))
                 .Returns(new Reservation[]
@@ -142,7 +142,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(FailedReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(FailedReservation));
         }
         
         [TestMethod]
@@ -150,7 +150,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         {
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
-                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                .Setup(m => m.GetNonFreeGarageReservationsByUser(It.IsAny<ApplicationUser>(),
                                                           new DateTime(2016, 3, 21),/* Monday */
                                                           new DateTime(2016, 3, 25) /* Friday */))
                 .Returns(new Reservation[]
@@ -189,7 +189,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -197,7 +197,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         {
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
-                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                .Setup(m => m.GetNonFreeGarageReservationsByUser(It.IsAny<ApplicationUser>(),
                                                           new DateTime(2016, 3, 21),/* Monday */
                                                           new DateTime(2016, 3, 25) /* Friday */))
                 .Returns(new Reservation[]
@@ -236,7 +236,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetAdminUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
         
         [TestMethod]
@@ -244,7 +244,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
         {
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
-                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                .Setup(m => m.GetNonFreeGarageReservationsByUser(It.IsAny<ApplicationUser>(),
                                                           new DateTime(2016, 3, 21),/* Monday */
                                                           new DateTime(2016, 3, 25) /* Friday */))
                 .Returns(new Reservation[]
@@ -283,7 +283,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -292,7 +292,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
-                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                .Setup(m => m.GetNonFreeGarageReservationsByUser(It.IsAny<ApplicationUser>(),
                                                           new DateTime(2016, 3, 21),/* Monday */
                                                           new DateTime(2016, 3, 25) /* Friday */))
                 .Returns(new Reservation[]
@@ -331,7 +331,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(FailedReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(FailedReservation));
         }
 
         [TestMethod]
@@ -340,7 +340,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
-                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                .Setup(m => m.GetNonFreeGarageReservationsByUser(It.IsAny<ApplicationUser>(),
                                                           new DateTime(2016, 3, 21),/* Monday */
                                                           new DateTime(2016, 3, 25) /* Friday */))
                 .Returns(new Reservation[]
@@ -379,7 +379,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(FailedReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(FailedReservation));
         }
 
         [TestMethod]
@@ -388,7 +388,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
-                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                .Setup(m => m.GetNonFreeGarageReservationsByUser(It.IsAny<ApplicationUser>(),
                                                           new DateTime(2016, 3, 21),/* Monday */
                                                           new DateTime(2016, 3, 25) /* Friday */))
                 .Returns(new Reservation[]
@@ -427,7 +427,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -436,7 +436,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
             var mockedReservationRepository = new Mock<IReservationRepository>();
             mockedReservationRepository
-                .Setup(m => m.GetGarageReservationsByUser(It.IsAny<ApplicationUser>(),
+                .Setup(m => m.GetNonFreeGarageReservationsByUser(It.IsAny<ApplicationUser>(),
                                                           new DateTime(2016, 3, 21),/* Monday */
                                                           new DateTime(2016, 3, 25) /* Friday */))
                 .Returns(new Reservation[]
@@ -475,7 +475,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
     }
 }

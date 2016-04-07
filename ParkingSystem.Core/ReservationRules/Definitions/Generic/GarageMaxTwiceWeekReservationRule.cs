@@ -22,14 +22,14 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
             if (IsRightTimeToRemoveAllRestrictions(reservation) ||
                 IsReservationMadeForOutsideParkingSpot(reservation) ||
                 IsReservationMadeByAdminUser(reservation))
-                return new SuccessfullReservationValidationResult();
+                return new SuccessfullGarageReservationAfterLimitExpiration();
 
             var userInGarageCount = GetUserGarageUsageInWeek(reservation.ApplicationUser, reservation.ReservationDate);
             
             if (userInGarageCount < GarageLimitPerWeek)
-                return new SuccessfullReservationValidationResult();
+                return new SuccessfullGarageReservationBeforeLimitExpiration();
             else
-                return new FailedReservationValidationResult(@"The limit for signing up at garage parking spot 
+                return new FailedReservation(@"The limit for signing up at garage parking spot 
                                                                has been reached for this week.");
         }
 
@@ -40,7 +40,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
             GetStartAndEndBusinessDayOfWeek(dateOfDayInWeek, out startDateOfWeek, out endDateOfWeek);
 
             return UnitOfWork.Reservations
-                .GetGarageReservationsByUser(user, startDateOfWeek, endDateOfWeek)
+                .GetNonFreeGarageReservationsByUser(user, startDateOfWeek, endDateOfWeek)
                 .Count();
         }
     }

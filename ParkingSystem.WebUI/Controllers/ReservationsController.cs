@@ -135,7 +135,7 @@ namespace ParkingSystem.WebUI.Controllers
                     CreatedDate = _calendarService.GetNow()
                 });
 
-            if (reservationResult.Success)
+            if (reservationResult.Valid)
             {
                 TempData["messageSuccess"] = string.Format(
                     "Your reservation for parking spot {0} on {1:dddd, M/d/yyyy} has been successfully created.",

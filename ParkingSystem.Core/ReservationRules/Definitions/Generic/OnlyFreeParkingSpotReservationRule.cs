@@ -13,9 +13,9 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         public override ReservationValidationResult Validate(Reservation reservation)
         {
             if (IsReservationParkingSpotStillFree(reservation))
-                return new SuccessfullReservationValidationResult();
+                return new SuccessfullCommonReservation();
             else
-                return new FailedReservationValidationResult("The parking spot is already reserved for this day.");
+                return new FailedReservation("The parking spot is already reserved for this day.");
         }
 
         private bool IsReservationParkingSpotStillFree(Reservation reservation)

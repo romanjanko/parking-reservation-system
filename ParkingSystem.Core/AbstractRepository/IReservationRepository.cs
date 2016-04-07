@@ -13,7 +13,7 @@ namespace ParkingSystem.Core.AbstractRepository
         PagedReservations GetAllReservationsByUser(PagingInfo pagination, ApplicationUser user, DateTime fromDate);
         IList<Reservation> GetAllReservationsByUser(ApplicationUser user, DateTime fromDate, DateTime toDate);
 
-        IList<Reservation> GetGarageReservationsByUser(ApplicationUser user, DateTime fromDate, DateTime toDate);
+        IList<Reservation> GetNonFreeGarageReservationsByUser(ApplicationUser user, DateTime fromDate, DateTime toDate);
 
         Reservation GetReservation(ParkingSpot parkingSpot, DateTime date);
     }

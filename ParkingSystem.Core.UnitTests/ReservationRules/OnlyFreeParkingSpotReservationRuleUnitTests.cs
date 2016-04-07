@@ -31,7 +31,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ParkingSpot = new ParkingSpot { Name = "ps1", Type = ParkingSpotType.Garage }
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ParkingSpot = new ParkingSpot { Name = "ps1", Type = ParkingSpotType.Garage }
                 });
 
-            Assert.IsInstanceOfType(result, typeof(FailedReservationValidationResult));
+            Assert.IsInstanceOfType(result, typeof(FailedReservation));
         }
     }
 }
