@@ -205,7 +205,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullNonFreeGarageReservation));
         }
 
         [TestMethod]
@@ -252,7 +252,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullNonFreeGarageReservation));
         }
 
         [TestMethod]
@@ -399,7 +399,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetAdminUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullFreeGarageReservation));
         }
 
         [TestMethod]
@@ -452,7 +452,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetAdminUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullFreeGarageReservation));
         }
 
         [TestMethod]
@@ -505,7 +505,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullFreeGarageReservation));
         }
 
         [TestMethod]
@@ -558,7 +558,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                     ApplicationUser = GetRegularUser()
                 });
 
-            Assert.IsInstanceOfType(result, typeof(SuccessfullCommonReservation));
+            Assert.IsInstanceOfType(result, typeof(SuccessfullFreeGarageReservation));
         }
     }
 }

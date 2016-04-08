@@ -21,10 +21,12 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         public override ReservationValidationResult Validate(Reservation reservation)
         {
             if (IsRightTimeToRemoveAllRestrictions(reservation) ||
-                IsReservationMadeForOutsideParkingSpot(reservation) ||
                 IsReservationMadeByAdminUser(reservation))
-                return new SuccessfullGarageReservationAfterLimitExpiration();
-                        
+                return new SuccessfullFreeGarageReservation();
+
+            if (IsReservationMadeForOutsideParkingSpot(reservation))
+                return new SuccessfullCommonReservation();
+
             var userReservationsInGarage = GetUserReservationsInGarageForWeek(
                 reservation.ApplicationUser, reservation.ReservationDate);
 
@@ -51,7 +53,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
                 }
             }
 
-            return new SuccessfullGarageReservationBeforeLimitExpiration();
+            return new SuccessfullNonFreeGarageReservation();
         }
 
         private bool IsReservationForMonday(Reservation reservation)

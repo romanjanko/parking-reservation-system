@@ -1,10 +1,8 @@
 ﻿namespace ParkingSystem.Core.ReservationRules
 {
-    //TODO
     public abstract class ReservationValidationResult
     {
         public bool Valid { get; set; }
-        public bool FreeReservation { get; set; }
         public string ErrorMessage { get; set; }
     }
 
@@ -22,27 +20,24 @@
         public SuccessfullCommonReservation()
         {
             Valid = true;
-            FreeReservation = true;
         }
     }
     
-    public class SuccessfullGarageReservationBeforeLimitExpiration : ReservationValidationResult
+    public class SuccessfullNonFreeGarageReservation : ReservationValidationResult
     {
 
-        public SuccessfullGarageReservationBeforeLimitExpiration()
+        public SuccessfullNonFreeGarageReservation()
         {
             Valid = true;
-            FreeReservation = false;
         }
     }
 
-    public class SuccessfullGarageReservationAfterLimitExpiration : ReservationValidationResult
+    public class SuccessfullFreeGarageReservation : ReservationValidationResult
     {
 
-        public SuccessfullGarageReservationAfterLimitExpiration()
+        public SuccessfullFreeGarageReservation()
         {
             Valid = true;
-            FreeReservation = true;
         }
     }
 }

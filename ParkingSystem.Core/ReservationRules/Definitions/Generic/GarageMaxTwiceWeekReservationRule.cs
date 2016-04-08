@@ -20,14 +20,16 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         public override ReservationValidationResult Validate(Reservation reservation)
         {
             if (IsRightTimeToRemoveAllRestrictions(reservation) ||
-                IsReservationMadeForOutsideParkingSpot(reservation) ||
                 IsReservationMadeByAdminUser(reservation))
-                return new SuccessfullGarageReservationAfterLimitExpiration();
+                return new SuccessfullFreeGarageReservation();
+
+            if (IsReservationMadeForOutsideParkingSpot(reservation))
+                return new SuccessfullCommonReservation();
 
             var userInGarageCount = GetUserGarageUsageInWeek(reservation.ApplicationUser, reservation.ReservationDate);
             
             if (userInGarageCount < GarageLimitPerWeek)
-                return new SuccessfullGarageReservationBeforeLimitExpiration();
+                return new SuccessfullNonFreeGarageReservation();
             else
                 return new FailedReservation(@"The limit for signing up at garage parking spot 
                                                                has been reached for this week.");

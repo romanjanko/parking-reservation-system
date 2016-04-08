@@ -66,7 +66,7 @@ namespace ParkingSystem.Core.Services
             
             if (validationResult.Valid)
             {
-                if (validationResult.FreeReservation)
+                if (validationResult.GetType() == typeof(SuccessfullFreeGarageReservation))
                     reservation.ReservedFreely = true;
 
                 _unitOfWork.Reservations.Add(reservation);

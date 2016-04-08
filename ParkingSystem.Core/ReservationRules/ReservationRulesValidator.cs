@@ -26,22 +26,20 @@ namespace ParkingSystem.Core.ReservationRules
 
             if (firstValidationError != null)
                 return firstValidationError;
-            
-            //TODO
-            if (reservation.ParkingSpot.Type == ParkingSpotType.Garage)
-            {
-                var garageReservedBeforeNoonThreshold = validationResults.FirstOrDefault(r => r.Valid && !r.FreeReservation);
-                var garageReservedAfterNoonThreshold = validationResults.FirstOrDefault(r => r.Valid && r.FreeReservation);
 
-                if (garageReservedBeforeNoonThreshold != null)
-                    return new SuccessfullGarageReservationBeforeLimitExpiration();
-                else
-                    return new SuccessfullGarageReservationAfterLimitExpiration();
-            }
-            else
-            {
-                return new SuccessfullCommonReservation();
-            }
+            var garageReservedBeforeNoonThreshold = validationResults
+                .FirstOrDefault(r => r.GetType() == typeof(SuccessfullNonFreeGarageReservation));
+
+            if (garageReservedBeforeNoonThreshold != null)
+                return garageReservedBeforeNoonThreshold;
+
+            var garageReservedAfterNoonThresholdOrByAdmin = validationResults
+                .FirstOrDefault(r => r.GetType() == typeof(SuccessfullFreeGarageReservation));
+
+            if (garageReservedAfterNoonThresholdOrByAdmin != null)
+                return garageReservedAfterNoonThresholdOrByAdmin;
+
+            return new SuccessfullCommonReservation();
         }
     }
 }
