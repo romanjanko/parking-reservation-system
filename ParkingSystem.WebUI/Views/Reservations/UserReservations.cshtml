@@ -40,11 +40,14 @@
                                 @String.Format("{0:dddd, M/d/yyyy HH:mm:ss}", reservation.CreatedDate)
                             </td>
                             <td class="text-right">
-                                <button type="button" class="btn btn-danger" 
-                                    data-parking-modal="true" data-parking-href="@Url.Action("DeleteReservation", "Reservations", new { id = reservation.Id })"
-                                    data-toggle="modal" data-target="#deleteReservationModal">
-                                    <span class="fa fa-trash"></span>Delete
-                                </button>
+                                @if (Model.CanBeReservationDeletedByUser(reservation.Id))
+                                {
+                                    <button type="button" class="btn btn-danger" 
+                                        data-parking-modal="true" data-parking-href="@Url.Action("DeleteReservation", "Reservations", new { id = reservation.Id })"
+                                        data-toggle="modal" data-target="#deleteReservationModal">
+                                        <span class="fa fa-trash"></span>Delete
+                                    </button>
+                                }
                             </td>
                         </tr>
                     }

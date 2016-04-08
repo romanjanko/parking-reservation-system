@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using ParkingSystem.Core.Pagination;
 using ParkingSystem.WebUI.Identity;
 using ParkingSystem.Core.Time;
+using System.Collections.Generic;
 
 namespace ParkingSystem.WebUI.Controllers
 {
@@ -102,11 +103,23 @@ namespace ParkingSystem.WebUI.Controllers
             var reservations = _reservationService.GetAllReservationsForUser(
                 pagingInfo, loggedApplicationUser, _calendarService.GetTodayDate());
 
+            var reservationsAdditionalInfo = new List<ReservationAdditionalInfo>();
+
+            foreach (var reservation in reservations.CurrentReservations)
+            {
+                reservationsAdditionalInfo.Add(new ReservationAdditionalInfo
+                {
+                    ReservationId = reservation.Id,
+                    CanBeDeletedByUser = _reservationService.CanBeReservationDeletedByUser(loggedApplicationUser, reservation)
+                });
+            }
+
             return View(
                 new UserReservationsListViewModel
                 {
                     Reservations = reservations.CurrentReservations,
-                    PagingInfo = reservations.PagingInfo
+                    PagingInfo = reservations.PagingInfo,
+                    ReservationsAdditionalInfo = reservationsAdditionalInfo
                 });
         }
 

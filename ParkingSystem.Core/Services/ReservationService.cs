@@ -85,7 +85,9 @@ namespace ParkingSystem.Core.Services
 
         public bool CanBeReservationDeletedByUser(ApplicationUser user, Reservation reservation)
         {
-            if (IsPastReservation(reservation)) return false;
+            if (IsPastReservation(reservation) ||
+                IsTodayReservationAfterTimeLimit(reservation))
+                return false;
 
             return IsReservationCreatedByUser(user, reservation) ||
                    user.IsUserAdmin();
@@ -95,7 +97,13 @@ namespace ParkingSystem.Core.Services
         {
             return reservation.ReservationDate.Date < _currentTime.Now().Date;
         }
-        
+
+        private bool IsTodayReservationAfterTimeLimit(Reservation reservation)
+        {
+            return reservation.ReservationDate.Date == _currentTime.Now().Date &&
+                _currentTime.Now().TimeOfDay >= new TimeSpan(10, 0, 0); //10:00AM
+        }
+
         private bool IsReservationCreatedByUser(ApplicationUser user, Reservation reservation)
         {
             return string.Compare(reservation.ApplicationUser.UserName, user.UserName, StringComparison.Ordinal) == 0;
