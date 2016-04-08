@@ -8,6 +8,10 @@
         $("body").scrollTop(0);
     };
 
+    var isPartialViewReturned = function (data) {
+        return data.match("^<!DOCTYPE") == null; //TODO
+    }
+
     var ajaxFormSubmit = function () {
         var $form = $(this);
 
@@ -23,8 +27,16 @@
                 moveToTheTopOfPage();
             }
             else {
-                var $target = $($form.attr("data-parking-target"));
-                $target.html($(data).find($form.attr("data-parking-target")));
+                if (!isPartialViewReturned(data)) {
+                    // it means that the authorization expired, so by refreshing page we will
+                    // be redirected in a standard way to login page.
+                    refreshPage();
+                    return false;
+                }
+                else {
+                    var $target = $($form.attr("data-parking-target"));
+                    $target.html($(data).find($form.attr("data-parking-target")));
+                }
             }
         });
 
@@ -35,11 +47,19 @@
         var $button = $(this);
         
         $.get($button.attr("data-parking-href"), function (data) {
-            var $target = $($button.attr("data-target"));
-            $target.html(data);
-            initFormsInsideModals();
+            if (!isPartialViewReturned(data)) {
+                // it means that the authorization expired, so by refreshing page we will
+                // be redirected in a standard way to login page.
+                refreshPage();
+                return false;
+            }
+            else {
+                var $target = $($button.attr("data-target"));
+                $target.html(data);
+                initFormsInsideModals();
+            }
         });
-
+        
         //return false;
     };
 
