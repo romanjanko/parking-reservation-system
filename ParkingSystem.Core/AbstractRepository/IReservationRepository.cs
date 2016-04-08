@@ -9,6 +9,7 @@ namespace ParkingSystem.Core.AbstractRepository
     {
         IList<Reservation> GetAllReservationsForDateRange(DateTime fromDate, DateTime toDate);
 
+        IList<Reservation> GetAllReservationsByUser(ApplicationUser user);
         IList<Reservation> GetAllReservationsByUser(ApplicationUser user, DateTime fromDate);
         PagedReservations GetAllReservationsByUser(PagingInfo pagination, ApplicationUser user, DateTime fromDate);
         IList<Reservation> GetAllReservationsByUser(ApplicationUser user, DateTime fromDate, DateTime toDate);

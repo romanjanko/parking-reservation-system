@@ -1,21 +1,24 @@
 ﻿using ParkingSystem.DomainModel.Models;
 using ParkingSystem.WebUI.Identity;
 using ParkingSystem.WebUI.Models;
-using System;
 using System.Linq;
 using System.Web.Mvc;
 using ParkingSystem.Core.Pagination;
+using ParkingSystem.Core.Services;
 
 namespace ParkingSystem.WebUI.Controllers
 {
     [Authorize(Roles = "Admins")]
     public class UsersController : Controller
     {
+        private readonly IReservationService _reservationService;
         private readonly ApplicationUserManager _applicationUserManager;
         private readonly int _pageSize = 8;
 
-        public UsersController(ApplicationUserManager applicationUserManager)
+        public UsersController(IReservationService reservationService,
+                               ApplicationUserManager applicationUserManager)
         {
+            _reservationService = reservationService;
             _applicationUserManager = applicationUserManager;
         }
 
@@ -53,35 +56,25 @@ namespace ParkingSystem.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteUser(ApplicationUser user)
         {
-            try
+            var userToDelete = _applicationUserManager.FindByIdAsync(user.Id).Result;
+
+            if (userToDelete == null)
+                return HttpNotFound();
+
+            _reservationService.DeleteAllReservationsForUser(userToDelete);
+            
+            var result = _applicationUserManager.DeleteAsync(userToDelete).Result;
+
+            if (result.Succeeded)
             {
-                var userToDelete = _applicationUserManager.FindByIdAsync(user.Id).Result;
+                TempData["messageSuccess"] = string.Format("The user {0} has been successfully deleted.",
+                    userToDelete.UserName);
 
-                if (userToDelete == null)
-                    return HttpNotFound();
-
-                // TODO throws an exception for some reason
-                var result = _applicationUserManager.DeleteAsync(userToDelete).Result;
-
-                if (result.Succeeded)
-                {
-                    TempData["messageSuccess"] = string.Format("The user {0} has been successfully deleted.",
-                        userToDelete.UserName);
-
-                    return Json(new { success = true });
-                }
-
-                foreach (var error in result.Errors)
-                    ModelState.AddModelError("", error);
+                return Json(new { success = true });
             }
-            catch (Exception)
-            {
-                // ignored
-            }
-            finally
-            {
-                ModelState.AddModelError("", "An unknown error occurred.");
-            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error);
 
             return PartialView("_DeleteUser", user);
         }

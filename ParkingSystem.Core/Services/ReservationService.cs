@@ -13,6 +13,7 @@ namespace ParkingSystem.Core.Services
     {
         Reservation GetReservation(int id);
         IList<Reservation> GetAllReservationsForDateRange(IList<DateTime> dateRange);
+        IList<Reservation> GetAllReservationsForUser(ApplicationUser user);
         IList<Reservation> GetAllReservationsForUser(ApplicationUser user, DateTime fromDate);
         PagedReservations GetAllReservationsForUser(PagingInfo pagination, ApplicationUser user, DateTime fromDate);
 
@@ -20,6 +21,7 @@ namespace ParkingSystem.Core.Services
 
         bool CanBeReservationDeletedByUser(ApplicationUser user, Reservation reservation);
         void DeleteReservation(int id);
+        void DeleteAllReservationsForUser(ApplicationUser user);
     }
 
     public class ReservationService : IReservationService
@@ -49,7 +51,12 @@ namespace ParkingSystem.Core.Services
 
             return _unitOfWork.Reservations.GetAllReservationsForDateRange(fromDate, toDate);
         }
-        
+
+        public IList<Reservation> GetAllReservationsForUser(ApplicationUser user)
+        {
+            return _unitOfWork.Reservations.GetAllReservationsByUser(user);
+        }
+
         public IList<Reservation> GetAllReservationsForUser(ApplicationUser user, DateTime fromDate)
         {
             return _unitOfWork.Reservations.GetAllReservationsByUser(user, fromDate);
@@ -101,6 +108,14 @@ namespace ParkingSystem.Core.Services
             if (reservation == null) return;
 
             _unitOfWork.Reservations.Remove(reservation);
+            _unitOfWork.SaveChanges();
+        }
+
+        public void DeleteAllReservationsForUser(ApplicationUser user)
+        {
+            var reservationsForUser = GetAllReservationsForUser(user);
+
+            _unitOfWork.Reservations.RemoveRange(reservationsForUser);
             _unitOfWork.SaveChanges();
         }
     }

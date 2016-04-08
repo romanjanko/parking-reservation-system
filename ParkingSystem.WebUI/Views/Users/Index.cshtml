@@ -32,12 +32,15 @@
                                 @user.EmailConfirmed.ToString().ToLower()
                             </td>
                             <td class="text-right">
-                                @*<button type="button" class="btn btn-danger"
-                                        data-parking-modal="true" 
-                                        data-parking-href="@Url.Action("DeleteUser", new { id = user.Id })"
-                                        data-toggle="modal" data-target="#deleteUserModal">
-                                    <span class="fa fa-trash"></span>Delete
-                                </button>*@
+                                @if (!user.IsUserAdmin())
+                                {
+                                    <button type="button" class="btn btn-danger"
+                                            data-parking-modal="true" 
+                                            data-parking-href="@Url.Action("DeleteUser", new { id = user.Id })"
+                                            data-toggle="modal" data-target="#deleteUserModal">
+                                        <span class="fa fa-trash"></span>Delete
+                                    </button>
+                                }
                             </td>
                         </tr>
                     }

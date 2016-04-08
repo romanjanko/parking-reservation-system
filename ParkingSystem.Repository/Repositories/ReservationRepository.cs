@@ -26,6 +26,12 @@ namespace ParkingSystem.Repository.Repositories
                 .Where(r => r.ReservationDate >= fromDate && r.ReservationDate <= toDate).ToList();
         }
 
+        public IList<Reservation> GetAllReservationsByUser(ApplicationUser user)
+        {
+            return ParkingSystemContext.Reservations
+                .Where(r => r.ApplicationUser.Id == user.Id).ToList();
+        }
+
         public IList<Reservation> GetAllReservationsByUser(ApplicationUser user, DateTime fromDate)
         {
             return ParkingSystemContext.Reservations
