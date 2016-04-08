@@ -11,12 +11,18 @@
         </div>
         
         <form method="post" action="@Url.Action("DeleteReservation", "Reservations", new { id = Model.Id })"
-                data-parking-ajax="true" data-parking-target="#deleteReservationModalBody">
+              data-parking-ajax="true" data-parking-target="#deleteReservationModalBody">
             <div id="deleteReservationModalBody" class="modal-body text-left">
                 @Html.AntiForgeryToken()
 
-                Are you sure you want to delete your reservation for parking spot @Model.ParkingSpot.Name on
-                @String.Format("{0:dddd, M/d/yyyy}", Model.ReservationDate)?
+                @if (User.IsInRole("Admins") && User.Identity.Name.CompareTo(Model.ApplicationUser.UserName) != 0)
+                {
+                    @:Are you sure you want to delete a reservation created by @Model.ApplicationUser.UserNameWithoutEmailDomain for parking spot @Model.ParkingSpot.Name on @String.Format("{0:dddd, M/d/yyyy}", Model.ReservationDate)?
+                }
+                else
+                {
+                    @:Are you sure you want to delete your reservation for parking spot @Model.ParkingSpot.Name on @String.Format("{0:dddd, M/d/yyyy}", Model.ReservationDate)?
+                }
             </div>
 
             <div class="modal-footer">
