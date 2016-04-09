@@ -23,3 +23,7 @@ html, body {
 .popover {
     z-index: 1040;
 }
+
+textarea {
+   resize: none;
+}

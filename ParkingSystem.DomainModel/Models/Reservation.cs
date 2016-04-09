@@ -13,5 +13,6 @@ namespace ParkingSystem.DomainModel.Models
         public DateTime ReservationDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool ReservedFreely { get; set; }
+        public string ReservationNote { get; set; }
     }
 }

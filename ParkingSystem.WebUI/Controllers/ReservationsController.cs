@@ -145,7 +145,8 @@ namespace ParkingSystem.WebUI.Controllers
                     ParkingSpot = parkingSpot,
                     ApplicationUser = _applicationUserManager.FindByNameAsync(User.Identity.Name).Result,
                     ReservationDate = reservation.ReservationDate,
-                    CreatedDate = _calendarService.GetNow()
+                    CreatedDate = _calendarService.GetNow(),
+                    ReservationNote = reservation.ReservationNote
                 });
 
             if (reservationResult.Valid)

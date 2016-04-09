@@ -29,6 +29,12 @@
     </tbody>
 </table>
 
+@if (!Model.Reservation.ReservationNote.IsEmpty())
+{
+    @Model.Reservation.ReservationNote
+    <br />
+}
+
 @if (Model.CanLoggedUserDeleteReservation)
 {
     <br/>

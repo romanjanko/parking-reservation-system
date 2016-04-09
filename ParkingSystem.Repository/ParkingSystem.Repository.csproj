@@ -68,6 +68,10 @@
     <Compile Include="Migrations\201604071412206_FreeReservations.Designer.cs">
       <DependentUpon>201604071412206_FreeReservations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604090713260_AddingReservationNoteColumn.cs" />
+    <Compile Include="Migrations\201604090713260_AddingReservationNoteColumn.Designer.cs">
+      <DependentUpon>201604090713260_AddingReservationNoteColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ParkingSpotRepository.cs" />
@@ -98,6 +102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604071412206_FreeReservations.resx">
       <DependentUpon>201604071412206_FreeReservations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604090713260_AddingReservationNoteColumn.resx">
+      <DependentUpon>201604090713260_AddingReservationNoteColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
