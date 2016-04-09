@@ -7,8 +7,8 @@
     <ProjectGuid>{8FE385D7-0BB3-4540-8EC0-AA2EA541886F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ParkingSystem.Model</RootNamespace>
-    <AssemblyName>ParkingSystem.Model</AssemblyName>
+    <RootNamespace>ParkingSystem.DomainModel</RootNamespace>
+    <AssemblyName>ParkingSystem.DomainModel</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
