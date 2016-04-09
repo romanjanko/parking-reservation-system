@@ -78,6 +78,7 @@
     <Compile Include="ReservationRules\OneParkingSpotPerDayReservationRuleUnitTests.cs" />
     <Compile Include="ReservationRules\GarageOnMondayOrFridayReservationRuleUnitTests.cs" />
     <Compile Include="ReservationRules\GarageMaxTwiceWeekReservationRuleUnitTests.cs" />
+    <Compile Include="ReservationRules\AbstractReservationRuleUnitTests.cs" />
     <Compile Include="Services\CalendarServiceUnitTests.cs" />
     <Compile Include="Time\DateToWeekOfYearConvertorUnitTests.cs" />
     <Compile Include="Time\DayOfWeekUtilsUnitTests.cs" />

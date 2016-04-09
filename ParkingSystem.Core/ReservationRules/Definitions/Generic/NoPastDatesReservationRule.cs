@@ -5,9 +5,12 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
     public class NoPastDatesReservationRule : AbstractReservationRule
     {
+        private readonly ICurrentTime _currentTime;
+
         public NoPastDatesReservationRule(ICurrentTime currentTime)
-            : base(null, null, null, currentTime)
+            : base()
         {
+            _currentTime = currentTime;
         }
 
         public override ReservationValidationResult Validate(Reservation reservation)
@@ -21,7 +24,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
         private bool IsReservationBeingMadeForPastDate(Reservation reservation)
         {
-            return reservation.ReservationDate.Date < CurrentTime.Now().Date;
+            return reservation.ReservationDate.Date < _currentTime.Now().Date;
         }
     }
 }

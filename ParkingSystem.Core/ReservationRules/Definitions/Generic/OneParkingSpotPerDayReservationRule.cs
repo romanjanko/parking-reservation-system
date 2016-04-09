@@ -6,9 +6,12 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
     public class OneParkingSpotPerDayReservationRule : AbstractReservationRule
     {
+        private readonly IUnitOfWork _unitOfWork;
+
         public OneParkingSpotPerDayReservationRule(IUnitOfWork unitOfWork)
-            : base(unitOfWork, null, null, null)
+            : base()
         {
+            _unitOfWork = unitOfWork;
         }
 
         public override ReservationValidationResult Validate(Reservation reservation)
@@ -22,10 +25,10 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
         private bool UserAlreadyHasReservationForSameDay(Reservation reservation)
         {
-            var userReservations = UnitOfWork.Reservations.GetAllReservationsByUser(
+            var userReservations = _unitOfWork.Reservations.GetAllReservationsByUser(
                     reservation.ApplicationUser, reservation.ReservationDate, reservation.ReservationDate);
 
-            return userReservations.FirstOrDefault() != null;
+            return userReservations.Any();
         }
     }
 }

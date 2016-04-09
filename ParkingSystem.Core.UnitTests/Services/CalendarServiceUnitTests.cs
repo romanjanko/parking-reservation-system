@@ -26,7 +26,7 @@ namespace ParkingSystem.Core.UnitTests.Services
             var weekOfYearToDateConvertor = new WeekOfYearToDateConvertor(_dateToWeekOfYearConvertor, dayOfWeekUtils);
             _weekOfYearIterator = new WeekOfYearIterator(_dateToWeekOfYearConvertor, weekOfYearToDateConvertor,
                 _currentTime);
-            _datesOfBusinessDaysCounter = new DatesOfBusinessDaysCounter(weekOfYearToDateConvertor);
+            _datesOfBusinessDaysCounter = new DatesOfBusinessDaysCounter(_dateToWeekOfYearConvertor, weekOfYearToDateConvertor);
 
         }
 

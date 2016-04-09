@@ -14,13 +14,14 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
     [TestClass]
     public class GarageOnMondayOrFridayReservationRuleUnitTests
     {
-        private readonly DateToWeekOfYearConvertor _dateToWeekOfYearConvertor;
-        private readonly WeekOfYearToDateConvertor _weekOfYearToDateConvertor;
+        private readonly IDatesOfBusinessDaysCounter _datesOfBusinessDaysCounter;
 
         public GarageOnMondayOrFridayReservationRuleUnitTests()
         {
-            _dateToWeekOfYearConvertor = new DateToWeekOfYearConvertor();
-            _weekOfYearToDateConvertor = new WeekOfYearToDateConvertor(_dateToWeekOfYearConvertor, new DayOfWeekUtils());
+            var dateToWeekOfYearConvertor = new DateToWeekOfYearConvertor();
+            var weekOfYearToDateConvertor = new WeekOfYearToDateConvertor(dateToWeekOfYearConvertor, new DayOfWeekUtils());
+
+            _datesOfBusinessDaysCounter = new DatesOfBusinessDaysCounter(dateToWeekOfYearConvertor, weekOfYearToDateConvertor);
         }
 
         private ParkingSpot GetGarageParkingSpot()
@@ -89,12 +90,9 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var reservationCreatedDate = new DateTime(2016, 3, 23, 11, 0, 0); /* Wednesday, 11:00 */
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object, 
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -141,13 +139,10 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var mockedUnitOfWork = new Mock<IUnitOfWork>();
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
-            var reservationCreatedDate = new DateTime(2016, 3, 19, 12, 0, 0); /* Saturday, 12:00 */
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            var reservationCreatedDate = new DateTime(2016, 3, 17, 12, 0, 0); /* Thursday, 12:00 */
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -188,13 +183,10 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var mockedUnitOfWork = new Mock<IUnitOfWork>();
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
-            var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            var reservationCreatedDate = new DateTime(2016, 3, 18, 11, 0, 0);
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -236,12 +228,9 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -283,12 +272,9 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -330,12 +316,9 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -383,12 +366,9 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -436,12 +416,9 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -489,12 +466,9 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var reservationCreatedDate = new DateTime(2016, 3, 24, 12, 0, 0); /* condition: day before, after noon */
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -542,12 +516,9 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             mockedUnitOfWork.Setup(m => m.Reservations).Returns(mockedReservationRepository.Object);
 
             var reservationCreatedDate = new DateTime(2016, 3, 20, 12, 0, 0); /* condition: day before, after noon */
-
-            var mockedCurrentTime = new Mock<ICurrentTime>();
-            mockedCurrentTime.Setup(m => m.Now()).Returns(reservationCreatedDate);
-
+            
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _dateToWeekOfYearConvertor, _weekOfYearToDateConvertor, mockedCurrentTime.Object);
+                _datesOfBusinessDaysCounter);
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation

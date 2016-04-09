@@ -4,29 +4,31 @@ using ParkingSystem.DomainModel.Models;
 using System.Collections.Generic;
 using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.Core.Time;
-using ParkingSystem.Core.Time.Convertors;
 
 namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
     public class GarageOnMondayOrFridayReservationRule : AbstractReservationRule
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IDatesOfBusinessDaysCounter _datesOfBusinessDaysCounter;
+
         public GarageOnMondayOrFridayReservationRule(IUnitOfWork unitOfWork,
-                                                     IDateToWeekOfYearConvertor dateToWeekOfYearConvertor,
-                                                     IWeekOfYearToDateConvertor weekOfYearToDateConvertor,
-                                                     ICurrentTime currentTime)
-            : base(unitOfWork, dateToWeekOfYearConvertor, weekOfYearToDateConvertor, currentTime)
+                                                     IDatesOfBusinessDaysCounter datesOfBusinessDaysCounter)
+            : base()
         {
+            _unitOfWork = unitOfWork;
+            _datesOfBusinessDaysCounter = datesOfBusinessDaysCounter;
         }
 
         public override ReservationValidationResult Validate(Reservation reservation)
         {
-            if (IsRightTimeToRemoveAllRestrictions(reservation) ||
-                IsReservationMadeByAdminUser(reservation))
-                return new SuccessfullFreeGarageReservation();
-
             if (IsReservationMadeForOutsideParkingSpot(reservation))
                 return new SuccessfullCommonReservation();
 
+            if (IsRightTimeToRemoveAllRestrictions(reservation) ||
+                IsReservationMadeByAdminUser(reservation))
+                return new SuccessfullFreeGarageReservation();
+            
             var userReservationsInGarage = GetUserReservationsInGarageForWeek(
                 reservation.ApplicationUser, reservation.ReservationDate);
 
@@ -66,14 +68,12 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
             return reservation.ReservationDate.DayOfWeek == DayOfWeek.Friday;
         }
 
-        private IEnumerable<Reservation> GetUserReservationsInGarageForWeek(
-            ApplicationUser user, DateTime dateOfDayInWeek)
+        private IEnumerable<Reservation> GetUserReservationsInGarageForWeek(ApplicationUser user, DateTime dateOfDayInWeek)
         {
-            DateTime startDateOfWeek, endDateOfWeek;
-
-            GetStartAndEndBusinessDayOfWeek(dateOfDayInWeek, out startDateOfWeek, out endDateOfWeek);
-
-            return UnitOfWork.Reservations.GetNonFreeGarageReservationsByUser(user, startDateOfWeek, endDateOfWeek);
+            var datesOfBusinessDaysInWeek = _datesOfBusinessDaysCounter.GetDatesOfBusinessDaysInWeek(dateOfDayInWeek);
+            
+            return _unitOfWork.Reservations.GetNonFreeGarageReservationsByUser(user,
+                datesOfBusinessDaysInWeek.Monday, datesOfBusinessDaysInWeek.Friday);
         }
     }
 }

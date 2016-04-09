@@ -5,9 +5,12 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
     public class OnlyFreeParkingSpotReservationRule : AbstractReservationRule
     {
+        private readonly IUnitOfWork _unitOfWork;
+
         public OnlyFreeParkingSpotReservationRule(IUnitOfWork unitOfWork)
-            : base(unitOfWork, null, null, null)
+            : base()
         {
+            _unitOfWork = unitOfWork;
         }
 
         public override ReservationValidationResult Validate(Reservation reservation)
@@ -20,7 +23,7 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
         private bool IsReservationParkingSpotStillFree(Reservation reservation)
         {
-            var alreadyExistingReservation = UnitOfWork.Reservations.GetReservation(
+            var alreadyExistingReservation = _unitOfWork.Reservations.GetReservation(
                 reservation.ParkingSpot, reservation.ReservationDate);
 
             return alreadyExistingReservation == null;

@@ -2,30 +2,32 @@
 using System.Linq;
 using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.Core.Time;
-using ParkingSystem.Core.Time.Convertors;
 using ParkingSystem.DomainModel.Models;
 
 namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
     public class GarageMaxTwiceWeekReservationRule : AbstractReservationRule
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IDatesOfBusinessDaysCounter _datesOfBusinessDaysCounter;
+
         public GarageMaxTwiceWeekReservationRule(IUnitOfWork unitOfWork,
-                                                 IDateToWeekOfYearConvertor dateToWeekOfYearConvertor,
-                                                 IWeekOfYearToDateConvertor weekOfYearToDateConvertor,
-                                                 ICurrentTime currentTime)
-            : base(unitOfWork, dateToWeekOfYearConvertor, weekOfYearToDateConvertor, currentTime)
+                                                 IDatesOfBusinessDaysCounter datesOfBusinessDaysCounter)
+            : base()
         {
+            _unitOfWork = unitOfWork;
+            _datesOfBusinessDaysCounter = datesOfBusinessDaysCounter;
         }
 
         public override ReservationValidationResult Validate(Reservation reservation)
         {
-            if (IsRightTimeToRemoveAllRestrictions(reservation) ||
-                IsReservationMadeByAdminUser(reservation))
-                return new SuccessfullFreeGarageReservation();
-
             if (IsReservationMadeForOutsideParkingSpot(reservation))
                 return new SuccessfullCommonReservation();
 
+            if (IsRightTimeToRemoveAllRestrictions(reservation) ||
+                IsReservationMadeByAdminUser(reservation))
+                return new SuccessfullFreeGarageReservation();
+            
             var userInGarageCount = GetUserGarageUsageInWeek(reservation.ApplicationUser, reservation.ReservationDate);
             
             if (userInGarageCount < GarageLimitPerWeek)
@@ -36,13 +38,11 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
         }
 
         private int GetUserGarageUsageInWeek(ApplicationUser user, DateTime dateOfDayInWeek)
-        {
-            DateTime startDateOfWeek, endDateOfWeek;
+        {            
+            var datesOfBusinessDaysInWeek = _datesOfBusinessDaysCounter.GetDatesOfBusinessDaysInWeek(dateOfDayInWeek);
 
-            GetStartAndEndBusinessDayOfWeek(dateOfDayInWeek, out startDateOfWeek, out endDateOfWeek);
-
-            return UnitOfWork.Reservations
-                .GetNonFreeGarageReservationsByUser(user, startDateOfWeek, endDateOfWeek)
+            return _unitOfWork.Reservations
+                .GetNonFreeGarageReservationsByUser(user, datesOfBusinessDaysInWeek.Monday, datesOfBusinessDaysInWeek.Friday)
                 .Count();
         }
     }
