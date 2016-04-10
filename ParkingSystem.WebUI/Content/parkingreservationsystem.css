@@ -27,3 +27,8 @@ html, body {
 textarea {
    resize: none;
 }
+
+.tooltip-inner {
+  white-space: nowrap;
+  max-width: none;
+}
