@@ -5,7 +5,7 @@
 }
 
 <h4>My reservations.</h4>
-<p>It shows all your upcoming reservations.</p>
+<p>It shows you all your upcoming reservations.</p>
 
 <div class="container">
     <div class="row" @(Model.Reservations.Count() == 0 ? "hidden" : "" )>
@@ -23,7 +23,7 @@
                     @foreach (var reservation in Model.Reservations)
                     {
                         <tr>
-                            <td>
+                            <td class="no-wrap">
                                 @String.Format("{0:dddd, M/d/yyyy}", reservation.ReservationDate)
 
                                 @if (reservation.ReservedFreely)
