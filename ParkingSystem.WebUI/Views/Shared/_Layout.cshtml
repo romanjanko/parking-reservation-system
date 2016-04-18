@@ -30,7 +30,7 @@
                         {
                             <li><a href="@Url.Action("Index", "Home")"><span class="fa fa-calendar"></span> Calendar <span class="sr-only">(current)</span></a></li>
                             <li>
-                                <a href="@Url.Action("UserReservations", "Reservations")">
+                                <a href="@Url.Action("UserReservations", "Reservations", new { page = string.Empty })">
                                     <span class="fa fa-book"></span> My Reservations
                                     <span class="badge">@{Html.RenderAction("UserReservationsTotal", "Reservations");}</span>
                                 </a>
@@ -61,7 +61,7 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="@Url.Action("ChangePassword", "Account")"><span class="fa fa-key"></span> Change Password</a></li>
                                     <li>
-                                        <a href="@Url.Action("UserReservations", "Reservations")">
+                                        <a href="@Url.Action("UserReservations", "Reservations", new { page = string.Empty })">
                                             <span class="fa fa-book"></span> My Reservations
                                             <span class="badge">@{Html.RenderAction("UserReservationsTotal", "Reservations");}</span>
                                         </a>
