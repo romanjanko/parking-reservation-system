@@ -150,9 +150,7 @@ namespace ParkingSystem.WebUI.Controllers
 
                 if (result.Succeeded)
                 {
-                    TempData["messageSuccess"] = string.Format("Your password has been successfully changed.");
-
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ChangePasswordConfirmation");
                 }
                 else
                 {
@@ -164,6 +162,11 @@ namespace ParkingSystem.WebUI.Controllers
             }
 
             return View(model);
+        }
+
+        public ActionResult ChangePasswordConfirmation()
+        {
+            return View();
         }
 
         [AllowAnonymous]
@@ -181,8 +184,7 @@ namespace ParkingSystem.WebUI.Controllers
             {
                 var user = _applicationUserManager.FindByName(model.EmailAddress);
 
-                if (user == null || 
-                   !_applicationUserManager.IsEmailConfirmed(user.Id))
+                if (user == null || !_applicationUserManager.IsEmailConfirmed(user.Id))
                 {
                     // don't reveal that the user does not exist or is not confirmed
                     return RedirectToAction("PasswordRecoveryConfirmation");
