@@ -213,3 +213,5 @@ ModelManifest.xml
 
 # custom
 *.config
+/ParkingSystem.WebUI/TODO.txt
+/ParkingSystem.WebUI/Service References/Application Insights/ConnectedService.json
