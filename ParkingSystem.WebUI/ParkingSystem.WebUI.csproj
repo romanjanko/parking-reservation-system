@@ -335,6 +335,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\BrnoParking - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\parkingreservationsys - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Images\he-is-dead-jim-white.jpeg">
