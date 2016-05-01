@@ -41,8 +41,8 @@
                                 <li class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="fa fa-cog"></span> Administration <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="@Url.Action("Index", "ParkingSpots")"><span class="fa fa-home"></span> Parking Spots</a></li>
-                                        <li><a href="@Url.Action("Index", "Users")"><span class="fa fa-users"></span> Users</a></li>
+                                        <li><a href="@Url.Action("Index", "ParkingSpots", new { page = string.Empty })"><span class="fa fa-home"></span> Parking Spots</a></li>
+                                        <li><a href="@Url.Action("Index", "Users", new { page = string.Empty })"><span class="fa fa-users"></span> Users</a></li>
                                     </ul>
                                 </li>
                             }
