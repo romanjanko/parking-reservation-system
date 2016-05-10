@@ -80,7 +80,7 @@
             html: true,
             content: function () {
                 var $popover = $(this);
-                var $popoverContent = $popover.find('#popover-content-wrapper');
+                var $popoverContent = $popover.siblings('#popover-content-wrapper');
 
                 return $popoverContent.html();
             }

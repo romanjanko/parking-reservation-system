@@ -48,7 +48,7 @@
                             }
                             @if (reservation == null)
                             {
-                                <button type="button" class="btn btn-default" data-parking-modal="true"
+                                <button type="button" class="btn btn-block btn-default" data-parking-modal="true"
                                         data-parking-href="@Url.Action("AddReservation", "Reservations", new { parkingSpotId = parkingSpot.Id, date = Model.BusinessDatesInWeek[i] })"
                                         data-toggle="modal" data-target="#addReservationModal">
                                     <span class="fa fa-calendar-plus-o"></span>
@@ -57,33 +57,25 @@
                             }
                             else
                             {
-                                <div class="no-wrap" data-toggle="popover" data-placement="auto top" title="Reservation details">
-                                    <div id="popover-content-wrapper" class="hidden">
-                                        @{Html.RenderAction("ReservationDetails", "Reservations", new { id = reservation.Id });}
-                                    </div>
+                                <div id="popover-content-wrapper" class="hidden">
+                                    @{Html.RenderAction("ReservationDetails", "Reservations", new { id = reservation.Id });}
+                                </div>
+                                
+                                <button type="button" class="btn btn-block @(string.Compare(reservation.ApplicationUser.UserName, User.Identity.Name, StringComparison.Ordinal) == 0 ? "btn-success-outline" : "btn-danger-outline")"
+                                    data-toggle="popover" title="Reservation details" data-placement="auto top">
 
-                                    <span class="fa fa-lock"></span>
-                                    @if (string.Compare(reservation.ApplicationUser.UserName, User.Identity.Name, StringComparison.Ordinal) == 0)
-                                    {
-                                        <b>@reservation.ApplicationUser.UserNameWithoutEmailDomain</b>
-                                    }
-                                    else
-                                    {
-                                        @reservation.ApplicationUser.UserNameWithoutEmailDomain
-                                    }
-                                    <sup><span class="fa fa-info-circle" data-toggle="tooltip" data-placement="auto top" title="Click for more information."></span></sup>
+                                    <b>@reservation.ApplicationUser.UserNameWithoutEmailDomain</b>
 
                                     @if (reservation.ReservedFreely)
                                     {
                                         <sup>
-                                            <span class="fa fa-star" data-toggle="tooltip" data-placement="auto top" 
-                                                  title="Reserved freely."></span>
+                                            <span class="fa fa-star"></span>
                                         </sup>
                                     }
-                                </div>
-                                            }
+                                </button>
+                            }
                         </td>
-                                            }
+                    }
                 </tr>
             }
         </tbody>
