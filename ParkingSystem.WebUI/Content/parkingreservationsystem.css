@@ -68,10 +68,10 @@ textarea {
 .btn-success-outline:focus, .btn-success-outline.focus, .btn-success-outline:active, .btn-success-outline.active,
 .open > .btn-success-outline.dropdown-toggle,
 .btn-success-outline:hover {
-  color: #78d078;
+  color: #549955;
   background-color: transparent;
   background-image: none;
-  border-color: #78d078;
+  border-color: #549955;
 }
 
 .btn-warning-outline,
@@ -88,8 +88,8 @@ textarea {
 .btn-danger-outline:focus, .btn-danger-outline.focus, .btn-danger-outline:active, .btn-danger-outline.active,
 .open > .btn-danger-outline.dropdown-toggle,
 .btn-danger-outline:hover {
-  color: #ea6966;
+  color: #db6563;
   background-color: transparent;
   background-image: none;
-  border-color: #ea6966;
+  border-color: #db6563;
 }
