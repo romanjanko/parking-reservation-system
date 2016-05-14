@@ -18,7 +18,7 @@ namespace ParkingSystem.WebUI.Identity
 
         public override async Task<IdentityResult> ValidateAsync(ApplicationUser user)
         {
-            IdentityResult result = await base.ValidateAsync(user);
+            IdentityResult result = await base.ValidateAsync(user).ConfigureAwait(false);
 
             var emailDomain = user.Email.Split('@')[1];
 

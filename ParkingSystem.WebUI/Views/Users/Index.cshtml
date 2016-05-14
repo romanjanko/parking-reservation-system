@@ -34,8 +34,26 @@
                             <td class="text-right">
                                 @if (!user.IsUserAdmin())
                                 {
+                                    if (user.EmailConfirmed)
+                                    {
+                                        <button type="button" class="btn btn-default"
+                                                data-parking-modal="true"
+                                                data-parking-href="@Url.Action("MakeUserInactive", new { id = user.Id })"
+                                                data-toggle="modal" data-target="#makeUserInactiveModal">
+                                            <span class="fa fa-times-circle"></span>Make inactive
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-default"
+                                                data-parking-modal="true"
+                                                data-parking-href="@Url.Action("MakeUserActive", new { id = user.Id })"
+                                                data-toggle="modal" data-target="#makeUserActiveModal">
+                                            <span class="fa fa-check-circle"></span>Make active
+                                        </button>
+                                    }
                                     <button type="button" class="btn btn-danger"
-                                            data-parking-modal="true" 
+                                            data-parking-modal="true"
                                             data-parking-href="@Url.Action("DeleteUser", new { id = user.Id })"
                                             data-toggle="modal" data-target="#deleteUserModal">
                                         <span class="fa fa-trash"></span>Delete
@@ -57,6 +75,14 @@
             </nav>
         </div>
     </div>
+</div>
+
+<!-- Make User Inactive Modal -->
+<div class="modal fade" id="makeUserInactiveModal" tabindex="-1" role="dialog" aria-labelledby="makeUserInactiveModalLabel">
+</div>
+
+<!-- Make User Active Modal -->
+<div class="modal fade" id="makeUserActiveModal" tabindex="-1" role="dialog" aria-labelledby="makeUserActiveModalLabel">
 </div>
 
 <!-- Delete User Modal -->

@@ -42,6 +42,76 @@ namespace ParkingSystem.WebUI.Controllers
             return View(model);
         }
 
+        public ActionResult MakeUserInactive(string id)
+        {
+            var user = _applicationUserManager.FindByIdAsync(id).Result;
+
+            if (user == null)
+                return HttpNotFound();
+
+            return PartialView("_MakeUserInactive", user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MakeUserInactive(ApplicationUser user)
+        {
+            var userToInactive = _applicationUserManager.FindByIdAsync(user.Id).Result;
+
+            if (userToInactive == null)
+                return HttpNotFound();
+
+            var result = _applicationUserManager.MakeUserInactive(userToInactive);
+
+            if (result.Succeeded)
+            {
+                TempData["messageSuccess"] = string.Format("The user {0} has been successfully made inactive.",
+                    userToInactive.UserName);
+
+                return Json(new { success = true });
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error);
+
+            return PartialView("_MakeUserInactive", user);
+        }
+
+        public ActionResult MakeUserActive(string id)
+        {
+            var user = _applicationUserManager.FindByIdAsync(id).Result;
+
+            if (user == null)
+                return HttpNotFound();
+
+            return PartialView("_MakeUserActive", user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MakeUserActive(ApplicationUser user)
+        {
+            var userToActive = _applicationUserManager.FindByIdAsync(user.Id).Result;
+
+            if (userToActive == null)
+                return HttpNotFound();
+
+            var result = _applicationUserManager.MakeUserActive(userToActive);
+
+            if (result.Succeeded)
+            {
+                TempData["messageSuccess"] = string.Format("The user {0} has been successfully made active.",
+                    userToActive.UserName);
+
+                return Json(new { success = true });
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error);
+
+            return PartialView("_MakeUserActive", user);
+        }
+
         public ActionResult DeleteUser(string id)
         {
             var user = _applicationUserManager.FindByIdAsync(id).Result;

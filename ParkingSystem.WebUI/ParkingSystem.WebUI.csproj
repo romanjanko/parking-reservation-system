@@ -402,6 +402,8 @@
     <Content Include="Views\Users\_DeleteUser.cshtml" />
     <Content Include="Views\Reservations\_ReservationDetails.cshtml" />
     <Content Include="Views\Account\ChangePasswordConfirmation.cshtml" />
+    <Content Include="Views\Users\_MakeUserInactive.cshtml" />
+    <Content Include="Views\Users\_MakeUserActive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
