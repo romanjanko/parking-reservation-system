@@ -40,7 +40,7 @@
                                                 data-parking-modal="true"
                                                 data-parking-href="@Url.Action("MakeUserInactive", new { id = user.Id })"
                                                 data-toggle="modal" data-target="#makeUserInactiveModal">
-                                            <span class="fa fa-times-circle"></span>Make inactive
+                                            <span class="fa fa-times-circle"></span> Make inactive
                                         </button>
                                     }
                                     else
@@ -49,14 +49,14 @@
                                                 data-parking-modal="true"
                                                 data-parking-href="@Url.Action("MakeUserActive", new { id = user.Id })"
                                                 data-toggle="modal" data-target="#makeUserActiveModal">
-                                            <span class="fa fa-check-circle"></span>Make active
+                                            <span class="fa fa-check-circle"></span> Make active
                                         </button>
                                     }
                                     <button type="button" class="btn btn-danger"
                                             data-parking-modal="true"
                                             data-parking-href="@Url.Action("DeleteUser", new { id = user.Id })"
                                             data-toggle="modal" data-target="#deleteUserModal">
-                                        <span class="fa fa-trash"></span>Delete
+                                        <span class="fa fa-trash"></span> Delete
                                     </button>
                                 }
                             </td>

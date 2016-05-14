@@ -44,7 +44,7 @@
                                 <button type="button" class="btn btn-danger" @(Model.CanBeReservationDeletedByUser(reservation.Id) ? "" : "disabled = disabled")
                                         data-parking-modal="true" data-parking-href="@Url.Action("DeleteReservation", "Reservations", new { id = reservation.Id })"
                                         data-toggle="modal" data-target="#deleteReservationModal">
-                                    <span class="fa fa-trash"></span>Delete
+                                    <span class="fa fa-trash"></span> Delete
                                 </button>
                             </td>
                         </tr>
