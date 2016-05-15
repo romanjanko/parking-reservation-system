@@ -9,52 +9,54 @@
 
 <div class="container">
     <div class="row" @(Model.Reservations.Count() == 0 ? "hidden" : "" )>
-        <div class="col-sm-offset-2 col-sm-8">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Reservation Date</th>
-                        <th>Parking Spot</th>
-                        <th>Created Time</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var reservation in Model.Reservations)
-                    {
+        <div class="col-lg-offset-2 col-lg-8">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
                         <tr>
-                            <td class="no-wrap">
-                                @String.Format("{0:dddd, M/d/yyyy}", reservation.ReservationDate)
-
-                                @if (reservation.ReservedFreely)
-                                {
-                                    <sup>
-                                        <span class="fa fa-star" data-toggle="tooltip" data-placement="auto top"
-                                              title="Reserved freely."></span>
-                                    </sup>
-                                }
-                            </td>
-                            <td>
-                                @reservation.ParkingSpot.Name <small>@reservation.ParkingSpot.Type</small>
-                            </td>
-                            <td>
-                                @String.Format("{0:dddd, M/d/yyyy HH:mm:ss}", reservation.CreatedDate)
-                            </td>
-                            <td class="text-right">
-                                <button type="button" class="btn btn-danger" @(Model.CanBeReservationDeletedByUser(reservation.Id) ? "" : "disabled = disabled")
-                                        data-parking-modal="true" data-parking-href="@Url.Action("DeleteReservation", "Reservations", new { id = reservation.Id })"
-                                        data-toggle="modal" data-target="#deleteReservationModal">
-                                    <span class="fa fa-trash"></span> Delete
-                                </button>
-                            </td>
+                            <th>Reservation Date</th>
+                            <th>Parking Spot</th>
+                            <th>Created Time</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var reservation in Model.Reservations)
+                        {
+                            <tr>
+                                <td class="no-wrap">
+                                    @String.Format("{0:dddd, M/d/yyyy}", reservation.ReservationDate)
+
+                                    @if (reservation.ReservedFreely)
+                                    {
+                                        <sup>
+                                            <span class="fa fa-star" data-toggle="tooltip" data-placement="auto top"
+                                                  title="Reserved freely."></span>
+                                        </sup>
+                                    }
+                                </td>
+                                <td>
+                                    @reservation.ParkingSpot.Name <small>@reservation.ParkingSpot.Type</small>
+                                </td>
+                                <td>
+                                    @String.Format("{0:dddd, M/d/yyyy HH:mm:ss}", reservation.CreatedDate)
+                                </td>
+                                <td class="text-right">
+                                    <button type="button" class="btn btn-danger" @(Model.CanBeReservationDeletedByUser(reservation.Id) ? "" : "disabled = disabled")
+                                            data-parking-modal="true" data-parking-href="@Url.Action("DeleteReservation", "Reservations", new { id = reservation.Id })"
+                                            data-toggle="modal" data-target="#deleteReservationModal">
+                                        <span class="fa fa-trash"></span> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="row" @(Model.PagingInfo.HidePagingNavigation() ? "hidden" : "")>
-        <div class="col-sm-offset-2 col-sm-8 text-right">
+        <div class="col-lg-offset-2 col-lg-8 text-right">
             <nav>
                 <ul class="pagination">
                     @Html.PageLinks(Model.PagingInfo, x => Url.Action("UserReservations", new { page = x }))

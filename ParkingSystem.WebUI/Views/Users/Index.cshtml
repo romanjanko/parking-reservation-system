@@ -12,66 +12,68 @@
 
 <div class="container">
     <div class="row" @(Model.Users.Count() == 0 ? "hidden" : "")>
-        <div class="col-sm-offset-2 col-sm-8">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Email Address</th>
-                        <th>Email Confirmed</th>
-                        <th>Account Is Active</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in Model.Users)
-                    {
+        <div class="col-lg-offset-2 col-lg-8">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
                         <tr>
-                            <td>
-                                @user.UserName
-                            </td>
-                            <td>
-                                @user.EmailConfirmed.ToString().ToLower()
-                            </td>
-                            <td>
-                                @user.UserAccountActive.ToString().ToLower()
-                            </td>
-                            <td class="text-right">
-                                @if (!user.IsUserAdmin())
-                                {
-                                    if (user.UserAccountActive)
-                                    {
-                                        <button type="button" class="btn btn-default"
-                                                data-parking-modal="true"
-                                                data-parking-href="@Url.Action("MakeUserInactive", new { id = user.Id })"
-                                                data-toggle="modal" data-target="#makeUserInactiveModal">
-                                            <span class="fa fa-times-circle"></span> Make inactive
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <button type="button" class="btn btn-default"
-                                                data-parking-modal="true"
-                                                data-parking-href="@Url.Action("MakeUserActive", new { id = user.Id })"
-                                                data-toggle="modal" data-target="#makeUserActiveModal">
-                                            <span class="fa fa-check-circle"></span> Make active
-                                        </button>
-                                    }
-                                    <button type="button" class="btn btn-danger"
-                                            data-parking-modal="true"
-                                            data-parking-href="@Url.Action("DeleteUser", new { id = user.Id })"
-                                            data-toggle="modal" data-target="#deleteUserModal">
-                                        <span class="fa fa-trash"></span> Delete
-                                    </button>
-                                }
-                            </td>
+                            <th>Email Address</th>
+                            <th>Email Confirmed</th>
+                            <th>Account Is Active</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>
+                                    @user.UserName
+                                </td>
+                                <td>
+                                    @user.EmailConfirmed.ToString().ToLower()
+                                </td>
+                                <td>
+                                    @user.UserAccountActive.ToString().ToLower()
+                                </td>
+                                <td class="text-right no-wrap">
+                                    @if (!user.IsUserAdmin())
+                                    {
+                                        if (user.UserAccountActive)
+                                        {
+                                            <button type="button" class="btn btn-default"
+                                                    data-parking-modal="true"
+                                                    data-parking-href="@Url.Action("MakeUserInactive", new { id = user.Id })"
+                                                    data-toggle="modal" data-target="#makeUserInactiveModal">
+                                                <span class="fa fa-times-circle"></span> Make inactive
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-default"
+                                                    data-parking-modal="true"
+                                                    data-parking-href="@Url.Action("MakeUserActive", new { id = user.Id })"
+                                                    data-toggle="modal" data-target="#makeUserActiveModal">
+                                                <span class="fa fa-check-circle"></span> Make active
+                                            </button>
+                                        }
+                                        <button type="button" class="btn btn-danger"
+                                                data-parking-modal="true"
+                                                data-parking-href="@Url.Action("DeleteUser", new { id = user.Id })"
+                                                data-toggle="modal" data-target="#deleteUserModal">
+                                            <span class="fa fa-trash"></span> Delete
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="row" @(Model.PagingInfo.HidePagingNavigation() ? "hidden" : "")>
-        <div class="col-sm-offset-2 col-sm-8 text-right">
+        <div class="col-lg-offset-2 col-lg-8 text-right">
             <nav>
                 <ul class="pagination">
                     @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { page = x }))
