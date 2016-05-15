@@ -36,7 +36,12 @@ namespace ParkingSystem.WebUI.Controllers
             {
                 if (!_applicationUserManager.IsEmailConfirmed(user.Id))
                 {
-                    ModelState.AddModelError("", "You must have a confirmed email to log on. Check your email inbox.");
+                    ModelState.AddModelError("", "You must have a confirmed email to log in. Check your email inbox.");
+                    return View(model);
+                }
+                else if (!_applicationUserManager.IsUserActive(user.Id))
+                {
+                    ModelState.AddModelError("", "Your account is inactive. Contact your administrator to activate it.");
                     return View(model);
                 }
                 else

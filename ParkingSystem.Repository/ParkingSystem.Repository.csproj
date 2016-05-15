@@ -72,6 +72,10 @@
     <Compile Include="Migrations\201604090713260_AddingReservationNoteColumn.Designer.cs">
       <DependentUpon>201604090713260_AddingReservationNoteColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605151400204_AddingAcountActiveField.cs" />
+    <Compile Include="Migrations\201605151400204_AddingAcountActiveField.Designer.cs">
+      <DependentUpon>201605151400204_AddingAcountActiveField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ParkingSpotRepository.cs" />
@@ -105,6 +109,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604090713260_AddingReservationNoteColumn.resx">
       <DependentUpon>201604090713260_AddingReservationNoteColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605151400204_AddingAcountActiveField.resx">
+      <DependentUpon>201605151400204_AddingAcountActiveField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

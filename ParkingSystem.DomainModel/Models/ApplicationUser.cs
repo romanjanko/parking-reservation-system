@@ -8,8 +8,11 @@ namespace ParkingSystem.DomainModel.Models
         public ApplicationUser() 
             : base()
         {
+            UserAccountActive = true;
         }
-        
+
+        public bool UserAccountActive { get; set; }
+
         public string UserNameWithoutEmailDomain
         {
             get

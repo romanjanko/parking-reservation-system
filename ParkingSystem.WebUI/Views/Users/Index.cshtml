@@ -18,6 +18,7 @@
                     <tr>
                         <th>Email Address</th>
                         <th>Email Confirmed</th>
+                        <th>Account Is Active</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -31,10 +32,13 @@
                             <td>
                                 @user.EmailConfirmed.ToString().ToLower()
                             </td>
+                            <td>
+                                @user.UserAccountActive.ToString().ToLower()
+                            </td>
                             <td class="text-right">
                                 @if (!user.IsUserAdmin())
                                 {
-                                    if (user.EmailConfirmed)
+                                    if (user.UserAccountActive)
                                     {
                                         <button type="button" class="btn btn-default"
                                                 data-parking-modal="true"
