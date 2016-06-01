@@ -61,7 +61,7 @@
                                     @{Html.RenderAction("ReservationDetails", "Reservations", new { id = reservation.Id });}
                                 </div>
                                 
-                                <button type="button" class="btn btn-block @(string.Compare(reservation.ApplicationUser.UserName, User.Identity.Name, StringComparison.Ordinal) == 0 ? "btn-success-outline" : "btn-danger-outline")"
+                                <button type="button" class="btn btn-block @(string.Compare(reservation.ApplicationUser.UserName, User.Identity.Name, StringComparison.Ordinal) == 0 ? "btn-success" : "btn-danger-outline")"
                                     data-toggle="popover" title="Reservation details" data-placement="auto top">
 
                                     <b>@reservation.ApplicationUser.UserNameWithoutEmailDomain</b>
