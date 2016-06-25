@@ -79,10 +79,12 @@
     <Compile Include="ReservationRules\GarageOnMondayOrFridayReservationRuleUnitTests.cs" />
     <Compile Include="ReservationRules\GarageMaxTwiceWeekReservationRuleUnitTests.cs" />
     <Compile Include="ReservationRules\AbstractReservationRuleUnitTests.cs" />
+    <Compile Include="ReservationRules\CheatingCheckUnitTests.cs" />
     <Compile Include="Services\CalendarServiceUnitTests.cs" />
     <Compile Include="Time\DateToWeekOfYearConvertorUnitTests.cs" />
     <Compile Include="Time\DayOfWeekUtilsUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Time\BusinessDaysIteratorUnitTests.cs" />
     <Compile Include="Time\WeekOfYearToDateConvertorUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>

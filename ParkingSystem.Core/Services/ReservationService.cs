@@ -6,6 +6,7 @@ using System.Linq;
 using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.Core.Pagination;
 using ParkingSystem.Core.Time;
+using ParkingSystem.Core.ReservationRules.AntiCheatingPolicies;
 
 namespace ParkingSystem.Core.Services
 {
@@ -20,7 +21,7 @@ namespace ParkingSystem.Core.Services
         ReservationValidationResult AddReservation(Reservation reservation);
 
         bool CanBeReservationDeletedByUser(ApplicationUser user, Reservation reservation);
-        void DeleteReservation(int id);
+        void DeleteReservation(int reservationId, ApplicationUser deletedByUser);
         void DeleteAllReservationsForUser(ApplicationUser user);
     }
 
@@ -29,14 +30,17 @@ namespace ParkingSystem.Core.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReservationRulesValidator _reservationRulesValidator;
         private readonly ICurrentTime _currentTime;
+        private readonly ICheatingCheck _cheatingCheck;
 
         public ReservationService(IUnitOfWork unitOfWork, 
                                   IReservationRulesValidator reservationRulesValidator, 
-                                  ICurrentTime currentTime)
+                                  ICurrentTime currentTime,
+                                  ICheatingCheck cheatingCheck)
         {
             _unitOfWork = unitOfWork;
             _reservationRulesValidator = reservationRulesValidator;
             _currentTime = currentTime;
+            _cheatingCheck = cheatingCheck;
         }
 
         public Reservation GetReservation(int id)
@@ -109,11 +113,13 @@ namespace ParkingSystem.Core.Services
             return string.Compare(reservation.ApplicationUser.UserName, user.UserName, StringComparison.Ordinal) == 0;
         }
 
-        public void DeleteReservation(int id)
+        public void DeleteReservation(int reservationId, ApplicationUser deletedByUser)
         {
-            var reservation = _unitOfWork.Reservations.Get(id);
+            var reservation = _unitOfWork.Reservations.Get(reservationId);
 
             if (reservation == null) return;
+
+            _cheatingCheck.Log(reservation, deletedByUser);
 
             _unitOfWork.Reservations.Remove(reservation);
             _unitOfWork.SaveChanges();

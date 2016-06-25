@@ -12,10 +12,12 @@ namespace ParkingSystem.Repository.Core
             _context = context;
             ParkingSpots = new ParkingSpotRepository(_context);
             Reservations = new ReservationRepository(_context);
+            DeletedReservations = new DeletedReservationRepository(_context);
         }
 
         public IParkingSpotRepository ParkingSpots { get; private set; }
         public IReservationRepository Reservations { get; private set; }
+        public IDeletedReservationRepository DeletedReservations { get; private set; }
 
         public int SaveChanges()
         {

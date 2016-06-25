@@ -8,6 +8,7 @@ using ParkingSystem.Core.ReservationRules.Definitions.Generic;
 using ParkingSystem.Core.Time;
 using ParkingSystem.Core.Time.Convertors;
 using ParkingSystem.Core.Time.Utils;
+using ParkingSystem.Core.ReservationRules.AntiCheatingPolicies;
 
 namespace ParkingSystem.Core.UnitTests.ReservationRules
 {
@@ -56,6 +57,16 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             };
         }
 
+        private ICheatingCheck GetMockedCheatingCheck()
+        {
+            var mockedCheatingCheck = new Mock<ICheatingCheck>();
+            mockedCheatingCheck
+                .Setup(m => m.CheckForCheating(It.IsAny<Reservation>()))
+                .Returns(new NoCheatingDetected());
+
+            return mockedCheatingCheck.Object;
+        }
+
         [TestMethod]
         public void RegularUserCanReserveGarageOnlyTwiceInSameWeek()
         {
@@ -81,7 +92,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0);
           
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -126,7 +137,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0);
 
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -170,7 +181,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0);
             
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -214,7 +225,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0);
             
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -258,7 +269,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 24, 12, 0, 0); /* Thursday, 12:00 (just after threshold) */
             
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -303,7 +314,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 24, 11, 59, 59); /* Thursday, 11:59:59 (just before threshold) */
             
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -348,7 +359,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 23, 13, 0, 0); /* Wednesday, 13:00 (long before threshold) */
             
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -393,7 +404,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 25, 13, 0, 0); /* Friday, 13:00 (long after threshold) */
             
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation
@@ -438,7 +449,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 26, 11, 0, 0); /* Saturday, 11:00 (long after threshold) */
             
             var garageMaxTwiceWeekReservationRule = new GarageMaxTwiceWeekReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageMaxTwiceWeekReservationRule.Validate(
                 new Reservation

@@ -4,6 +4,7 @@ using ParkingSystem.DomainModel.Models;
 using System.Collections.Generic;
 using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.Core.Time;
+using ParkingSystem.Core.ReservationRules.AntiCheatingPolicies;
 
 namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
@@ -11,13 +12,16 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDatesOfBusinessDaysCounter _datesOfBusinessDaysCounter;
+        private readonly ICheatingCheck _cheatingCheck;
 
         public GarageOnMondayOrFridayReservationRule(IUnitOfWork unitOfWork,
-                                                     IDatesOfBusinessDaysCounter datesOfBusinessDaysCounter)
+                                                     IDatesOfBusinessDaysCounter datesOfBusinessDaysCounter,
+                                                     ICheatingCheck cheatingCheck)
             : base()
         {
             _unitOfWork = unitOfWork;
             _datesOfBusinessDaysCounter = datesOfBusinessDaysCounter;
+            _cheatingCheck = cheatingCheck;
         }
 
         public override ReservationValidationResult Validate(Reservation reservation)
@@ -25,10 +29,16 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
             if (IsReservationMadeForOutsideParkingSpot(reservation))
                 return new SuccessfullCommonReservation();
 
-            if (IsRightTimeToRemoveAllRestrictions(reservation) ||
-                IsReservationMadeByAdminUser(reservation))
+            if (IsReservationMadeByAdminUser(reservation))
                 return new SuccessfullFreeGarageReservation();
-            
+
+            var cheatingCheckResult = _cheatingCheck.CheckForCheating(reservation);
+            var rightTimeRemoveRestrictions = IsRightTimeToRemoveAllRestrictions(reservation);
+
+            if (rightTimeRemoveRestrictions &&
+                cheatingCheckResult.CheatingDetected == false)
+                return new SuccessfullFreeGarageReservation();
+
             var userReservationsInGarage = GetUserReservationsInGarageForWeek(
                 reservation.ApplicationUser, reservation.ReservationDate);
 
@@ -39,6 +49,9 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
                 if (garageReservationOnFriday != null)
                 {
+                    if (rightTimeRemoveRestrictions && cheatingCheckResult.CheatingDetected)
+                        return new FailedReservation(@"Possible cheating detected. You cannot reserve this parking spot freely.");
+
                     return new FailedReservation(@"You can sign up for either Monday or Friday in garage.
                         A reservation for Friday was already made.");
                 }
@@ -50,6 +63,9 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 
                 if (garageReservationOnMonday != null)
                 {
+                    if (rightTimeRemoveRestrictions && cheatingCheckResult.CheatingDetected)
+                        return new FailedReservation(@"Possible cheating detected. You cannot reserve this parking spot freely.");
+
                     return new FailedReservation(@"You can sign up for either Monday or Friday in garage. 
                         A reservation for Monday was already made.");
                 }

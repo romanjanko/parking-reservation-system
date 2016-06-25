@@ -190,7 +190,9 @@ namespace ParkingSystem.WebUI.Controllers
                 reservationToDelete.ParkingSpot.Name,
                 reservationToDelete.ReservationDate);
 
-            _reservationService.DeleteReservation(reservationToDelete.Id);
+            var loggedApplicationUser = _applicationUserManager.FindByNameAsync(User.Identity.Name).Result;
+
+            _reservationService.DeleteReservation(reservationToDelete.Id, loggedApplicationUser);
 
             return Json(new { success = true });
         }

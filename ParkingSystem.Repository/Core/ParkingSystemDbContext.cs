@@ -18,5 +18,6 @@ namespace ParkingSystem.Repository.Core
 
         public DbSet<ParkingSpot> ParkingSpots { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<DeletedReservation> DeletedReservations { get; set; }
     }
 }

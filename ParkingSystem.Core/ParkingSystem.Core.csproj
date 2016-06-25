@@ -56,9 +56,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractRepository\IDeletedReservationRepository.cs" />
     <Compile Include="Pagination\PagedParkingSpots.cs" />
     <Compile Include="Pagination\PagedReservations.cs" />
     <Compile Include="Pagination\PagingInfo.cs" />
+    <Compile Include="ReservationRules\AntiCheatingPolicies\CheatingCheckResult.cs" />
+    <Compile Include="ReservationRules\AntiCheatingPolicies\CheatingCheck.cs" />
+    <Compile Include="Time\BusinessDaysIterator.cs" />
     <Compile Include="Time\DatesOfBusinessDays.cs" />
     <Compile Include="Time\DatesOfBusinessDaysCounter.cs" />
     <Compile Include="Time\Utils\WeekendDayUtils.cs" />

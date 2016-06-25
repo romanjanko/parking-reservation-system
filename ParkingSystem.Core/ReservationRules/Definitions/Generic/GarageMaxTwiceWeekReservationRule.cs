@@ -3,6 +3,7 @@ using System.Linq;
 using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.Core.Time;
 using ParkingSystem.DomainModel.Models;
+using ParkingSystem.Core.ReservationRules.AntiCheatingPolicies;
 
 namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
 {
@@ -10,13 +11,17 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDatesOfBusinessDaysCounter _datesOfBusinessDaysCounter;
+        private readonly ICheatingCheck _cheatingCheck;
 
         public GarageMaxTwiceWeekReservationRule(IUnitOfWork unitOfWork,
-                                                 IDatesOfBusinessDaysCounter datesOfBusinessDaysCounter)
+                                                 IDatesOfBusinessDaysCounter datesOfBusinessDaysCounter,
+                                                 ICheatingCheck cheatingCheck)
             : base()
         {
             _unitOfWork = unitOfWork;
             _datesOfBusinessDaysCounter = datesOfBusinessDaysCounter;
+            _cheatingCheck = cheatingCheck;
+
         }
 
         public override ReservationValidationResult Validate(Reservation reservation)
@@ -24,17 +29,25 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
             if (IsReservationMadeForOutsideParkingSpot(reservation))
                 return new SuccessfullCommonReservation();
 
-            if (IsRightTimeToRemoveAllRestrictions(reservation) ||
-                IsReservationMadeByAdminUser(reservation))
+            if (IsReservationMadeByAdminUser(reservation))
                 return new SuccessfullFreeGarageReservation();
-            
+
+            var cheatingCheckResult = _cheatingCheck.CheckForCheating(reservation);
+            var rightTimeRemoveRestrictions = IsRightTimeToRemoveAllRestrictions(reservation);
+
+            if (rightTimeRemoveRestrictions && 
+                cheatingCheckResult.CheatingDetected == false)
+                return new SuccessfullFreeGarageReservation();
+
             var userInGarageCount = GetUserGarageUsageInWeek(reservation.ApplicationUser, reservation.ReservationDate);
-            
+
             if (userInGarageCount < GarageLimitPerWeek)
                 return new SuccessfullNonFreeGarageReservation();
-            else
-                return new FailedReservation(@"The limit for signing up at garage parking spot 
-                                                               has been reached for this week.");
+            else if (rightTimeRemoveRestrictions && cheatingCheckResult.CheatingDetected)
+                return new FailedReservation(@"Possible cheating detected. You cannot reserve this parking spot freely.");
+            
+            return new FailedReservation(@"The limit for signing up at garage parking spot 
+                                               has been reached for this week.");
         }
 
         private int GetUserGarageUsageInWeek(ApplicationUser user, DateTime dateOfDayInWeek)

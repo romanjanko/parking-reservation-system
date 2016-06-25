@@ -8,6 +8,7 @@ using ParkingSystem.Core.ReservationRules.Definitions.Generic;
 using ParkingSystem.Core.Time;
 using ParkingSystem.Core.Time.Convertors;
 using ParkingSystem.Core.Time.Utils;
+using ParkingSystem.Core.ReservationRules.AntiCheatingPolicies;
 
 namespace ParkingSystem.Core.UnitTests.ReservationRules
 {
@@ -55,6 +56,16 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
                 UserName = "user"
             };
         }
+        
+        private ICheatingCheck GetMockedCheatingCheck()
+        {
+            var mockedCheatingCheck = new Mock<ICheatingCheck>();
+            mockedCheatingCheck
+                .Setup(m => m.CheckForCheating(It.IsAny<Reservation>()))
+                .Returns(new NoCheatingDetected());
+
+            return mockedCheatingCheck.Object;
+        }
 
         [TestMethod]
         public void RegularUserCannotReserveGarageOnMondayAndFridayInSameWeek_1()
@@ -92,7 +103,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 23, 11, 0, 0); /* Wednesday, 11:00 */
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object, 
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -142,7 +153,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 17, 12, 0, 0); /* Thursday, 12:00 */
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -186,7 +197,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 18, 11, 0, 0);
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -230,7 +241,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -274,7 +285,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -318,7 +329,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -368,7 +379,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -418,7 +429,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 20, 11, 0, 0);
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -468,7 +479,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 24, 12, 0, 0); /* condition: day before, after noon */
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation
@@ -518,7 +529,7 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
             var reservationCreatedDate = new DateTime(2016, 3, 20, 12, 0, 0); /* condition: day before, after noon */
             
             var garageOnMondayOrFridayReservationRule = new GarageOnMondayOrFridayReservationRule(mockedUnitOfWork.Object,
-                _datesOfBusinessDaysCounter);
+                _datesOfBusinessDaysCounter, GetMockedCheatingCheck());
 
             var result = garageOnMondayOrFridayReservationRule.Validate(
                 new Reservation

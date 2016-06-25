@@ -14,7 +14,8 @@ namespace ParkingSystem.Core.UnitTests.ReservationRules
 
         public NoPastDatesReservationRuleUnitTests()
         {
-            //TODO maybe it would be better to remove it
+            //TODO maybe it would be better to remove it - also, it depends on current implementation which is
+            //wrong approach.
             _currentTime = new CurrentTimeForCentralEuropeTimeZone();
         }
 

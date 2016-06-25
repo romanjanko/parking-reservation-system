@@ -6,7 +6,8 @@ namespace ParkingSystem.Core.AbstractRepository
     {
         IParkingSpotRepository ParkingSpots { get; }
         IReservationRepository Reservations { get; }
-        
+        IDeletedReservationRepository DeletedReservations { get; }
+
         int SaveChanges();
     }
 }

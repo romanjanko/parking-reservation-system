@@ -15,6 +15,7 @@ using ParkingSystem.Core.AbstractRepository;
 using ParkingSystem.Core.Time;
 using ParkingSystem.Core.Time.Convertors;
 using ParkingSystem.Core.Time.Utils;
+using ParkingSystem.Core.ReservationRules.AntiCheatingPolicies;
 
 namespace ParkingSystem.WebUI
 {
@@ -36,12 +37,14 @@ namespace ParkingSystem.WebUI
             builder.RegisterType<ParkingSpotService>().As<IParkingSpotService>().InstancePerLifetimeScope();
             builder.RegisterType<ReservationService>().As<IReservationService>().InstancePerLifetimeScope();
             builder.RegisterType<CalendarService>().As<ICalendarService>().InstancePerLifetimeScope();
+            builder.RegisterType<CheatingCheck>().As<ICheatingCheck>().InstancePerLifetimeScope();
 
             builder.RegisterType<DateToWeekOfYearConvertor>().As<IDateToWeekOfYearConvertor>().InstancePerLifetimeScope();
             builder.RegisterType<WeekOfYearToDateConvertor>().As<IWeekOfYearToDateConvertor>().InstancePerLifetimeScope();
             builder.RegisterType<CurrentTimeForCentralEuropeTimeZone>().As<ICurrentTime>().InstancePerLifetimeScope();
             builder.RegisterType<DatesOfBusinessDaysCounter>().As<IDatesOfBusinessDaysCounter>().InstancePerLifetimeScope();
             builder.RegisterType<WeekOfYearIterator>().As<IWeekOfYearIterator>().InstancePerLifetimeScope();
+            builder.RegisterType<BusinessDaysIterator>().As<IBusinessDaysIterator>().InstancePerLifetimeScope();
             builder.RegisterType<DayOfWeekUtils>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<WeekendDayUtils>().AsSelf().InstancePerLifetimeScope();
 
