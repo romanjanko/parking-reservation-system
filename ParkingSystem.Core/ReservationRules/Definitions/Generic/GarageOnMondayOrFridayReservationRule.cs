@@ -50,7 +50,8 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
                 if (garageReservationOnFriday != null)
                 {
                     if (rightTimeRemoveRestrictions && cheatingCheckResult.CheatingDetected)
-                        return new FailedReservation(@"Possible cheating detected. You cannot reserve this parking spot freely.");
+                        return new FailedReservation(@"Possible cheating detected based on your previous reservations for this day. 
+                            You cannot reserve the parking spot freely.");
 
                     return new FailedReservation(@"You can sign up for either Monday or Friday in garage.
                         A reservation for Friday was already made.");
@@ -64,7 +65,8 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
                 if (garageReservationOnMonday != null)
                 {
                     if (rightTimeRemoveRestrictions && cheatingCheckResult.CheatingDetected)
-                        return new FailedReservation(@"Possible cheating detected. You cannot reserve this parking spot freely.");
+                        return new FailedReservation(@"Possible cheating detected based on your previous reservations for this day. 
+                            You cannot reserve the parking spot freely.");
 
                     return new FailedReservation(@"You can sign up for either Monday or Friday in garage. 
                         A reservation for Monday was already made.");

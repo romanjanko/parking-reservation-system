@@ -44,7 +44,8 @@ namespace ParkingSystem.Core.ReservationRules.Definitions.Generic
             if (userInGarageCount < GarageLimitPerWeek)
                 return new SuccessfullNonFreeGarageReservation();
             else if (rightTimeRemoveRestrictions && cheatingCheckResult.CheatingDetected)
-                return new FailedReservation(@"Possible cheating detected. You cannot reserve this parking spot freely.");
+                return new FailedReservation(@"Possible cheating detected based on your previous reservations for this day. 
+                    You cannot reserve the parking spot freely.");
             
             return new FailedReservation(@"The limit for signing up at garage parking spot 
                                                has been reached for this week.");
