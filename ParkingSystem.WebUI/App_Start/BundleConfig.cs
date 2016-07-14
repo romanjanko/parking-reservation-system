@@ -22,6 +22,7 @@ namespace ParkingSystem.WebUI
             bundles.Add(new StyleBundle("~/Content/parking").Include(
                         "~/Content/font-awesome.css",
                         "~/Content/bootstrap.css",
+                        "~/Content/animate.css",
                         "~/Content/parkingreservationsystem.css"));
         }
     }
