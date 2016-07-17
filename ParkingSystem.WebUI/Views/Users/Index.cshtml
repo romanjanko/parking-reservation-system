@@ -6,11 +6,32 @@
 
 <h4>Administration section for users.</h4>
 <p>
+    Currently having total of @Model.AllUsersTotal registered users.
 </p>
 
-<br />
-
 <div class="container">
+    <div class="row">
+        <div class="col-lg-offset-2 col-lg-8">
+            @using (Html.BeginForm("Search", "Users"))
+            {
+                <div class="form-horizontal text-right">
+                    <div class="form-group">
+                        <div class="input-group col-sm-offset-6 col-sm-6">
+                            @Html.TextBoxFor(m => m.SearchTerm,
+                                                 new
+                                                 {
+                                                     @class = "form-control",
+                                                     placeholder = "Search for user..."
+                                                 })
+                            <span class="input-group-addon">
+                                <span class="fa fa-search fa-fw"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
     <div class="row" @(Model.Users.Count() == 0 ? "hidden" : "")>
         <div class="col-lg-offset-2 col-lg-8">
             <div class="table-responsive">
@@ -37,33 +58,30 @@
                                     @user.UserAccountActive.ToString().ToLower()
                                 </td>
                                 <td class="text-right no-wrap">
-                                    @if (!user.IsUserAdmin())
+                                    @if (user.UserAccountActive)
                                     {
-                                        if (user.UserAccountActive)
-                                        {
-                                            <button type="button" class="btn btn-default"
-                                                    data-parking-modal="true"
-                                                    data-parking-href="@Url.Action("MakeUserInactive", new { id = user.Id })"
-                                                    data-toggle="modal" data-target="#makeUserInactiveModal">
-                                                <span class="fa fa-times-circle"></span> Make Inactive
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-default"
-                                                    data-parking-modal="true"
-                                                    data-parking-href="@Url.Action("MakeUserActive", new { id = user.Id })"
-                                                    data-toggle="modal" data-target="#makeUserActiveModal">
-                                                <span class="fa fa-check-circle"></span> Make Active
-                                            </button>
-                                        }
-                                        <button type="button" class="btn btn-danger"
+                                        <button type="button" class="btn btn-default" @(user.IsUserAdmin() ? "disabled = disabled" : "")
                                                 data-parking-modal="true"
-                                                data-parking-href="@Url.Action("DeleteUser", new { id = user.Id })"
-                                                data-toggle="modal" data-target="#deleteUserModal">
-                                            <span class="fa fa-trash"></span> Delete
+                                                data-parking-href="@Url.Action("MakeUserInactive", new { id = user.Id })"
+                                                data-toggle="modal" data-target="#makeUserInactiveModal">
+                                            <span class="fa fa-times-circle"></span> Make Inactive
                                         </button>
                                     }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-default" @(user.IsUserAdmin() ? "disabled = disabled" : "")
+                                                data-parking-modal="true"
+                                                data-parking-href="@Url.Action("MakeUserActive", new { id = user.Id })"
+                                                data-toggle="modal" data-target="#makeUserActiveModal">
+                                            <span class="fa fa-check-circle"></span> Make Active
+                                        </button>
+                                    }
+                                    <button type="button" class="btn btn-danger" @(user.IsUserAdmin() ? "disabled = disabled" : "")
+                                            data-parking-modal="true"
+                                            data-parking-href="@Url.Action("DeleteUser", new { id = user.Id })"
+                                            data-toggle="modal" data-target="#deleteUserModal">
+                                        <span class="fa fa-trash"></span> Delete
+                                    </button>
                                 </td>
                             </tr>
                         }
@@ -76,12 +94,13 @@
         <div class="col-lg-offset-2 col-lg-8 text-right">
             <nav>
                 <ul class="pagination">
-                    @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { page = x }))
+                    @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { searchTerm = Model.SearchTerm, page = x }))
                 </ul>
             </nav>
         </div>
     </div>
 </div>
+
 
 <!-- Make User Inactive Modal -->
 <div class="modal fade" id="makeUserInactiveModal" tabindex="-1" role="dialog" aria-labelledby="makeUserInactiveModalLabel">

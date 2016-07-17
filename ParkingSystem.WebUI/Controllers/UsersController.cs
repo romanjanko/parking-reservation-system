@@ -22,24 +22,38 @@ namespace ParkingSystem.WebUI.Controllers
             _applicationUserManager = applicationUserManager;
         }
 
-        public ActionResult Index(int page = 1)
+        public ActionResult Index(string searchTerm = null, int page = 1)
         {
+            IQueryable<ApplicationUser> users;
+
+            if (string.IsNullOrEmpty(searchTerm))
+                users = _applicationUserManager.Users;
+            else
+                users = _applicationUserManager.Users.Where(u => u.UserName.Contains(searchTerm));
+
             var model = new UsersListViewModel
             {
-                Users = _applicationUserManager.Users
-                                .OrderBy(u => u.UserName)
-                                .Skip((page - 1) * _pageSize)
-                                .Take(_pageSize)
-                                .ToList(),
+                Users = users
+                            .OrderBy(u => u.UserName)
+                            .Skip((page - 1) * _pageSize)
+                            .Take(_pageSize)
+                            .ToList(),
+                SearchTerm = searchTerm,
+                AllUsersTotal = _applicationUserManager.Users.Count(),
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
                     ItemsPerPage = _pageSize,
-                    TotalItems = _applicationUserManager.Users.Count()
+                    TotalItems = users.Count()
                 }
             };
 
             return View(model);
+        }
+
+        public ActionResult Search(string searchTerm)
+        {
+            return RedirectToAction("Index", new { searchTerm = searchTerm });
         }
 
         public ActionResult MakeUserInactive(string id)
