@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ParkingSystem.Core.AbstractRepository;
-using ParkingSystem.DomainModel.Models;
+﻿using ParkingSystem.Core.AbstractRepository;
+using ParkingSystem.Core.Models;
 using ParkingSystem.Core.Pagination;
+using ParkingSystem.DomainModel.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ParkingSystem.Core.Services
 {
@@ -12,13 +13,15 @@ namespace ParkingSystem.Core.Services
         PagedParkingSpots GetParkingSpots(PagingInfo pagination);
         ParkingSpot GetParkingSpot(int id);
 
+        ParkingSpotsTotals GetParkingSpotsTotals();
+
         bool TestIfParkingSpotWithSameNameAlreadyExists(ParkingSpot parkingSpot);
 
         void AddParkingSpot(ParkingSpot parkingSpot);
         void UpdateParkingSpot(ParkingSpot parkingSpot);
         void DeleteParkingSpot(int id);
     }
-
+    
     public class ParkingSpotService : IParkingSpotService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -81,6 +84,11 @@ namespace ParkingSystem.Core.Services
             originalParkingSpot.Name = parkingSpot.Name;
             originalParkingSpot.Type = parkingSpot.Type;
             _unitOfWork.SaveChanges();
+        }
+        
+        public ParkingSpotsTotals GetParkingSpotsTotals()
+        {
+            return _unitOfWork.ParkingSpots.GetParkingSpotsTotals();
         }
     }
 }

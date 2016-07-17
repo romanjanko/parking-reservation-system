@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ParkingSystem.Repository.Core;
-using ParkingSystem.DomainModel.Models;
-using System;
-using ParkingSystem.Core.AbstractRepository;
+﻿using ParkingSystem.Core.AbstractRepository;
+using ParkingSystem.Core.Models;
 using ParkingSystem.Core.Pagination;
+using ParkingSystem.DomainModel.Models;
+using ParkingSystem.Repository.Core;
+using System;
+using System.Linq;
 
 namespace ParkingSystem.Repository.Repositories
 {
@@ -45,6 +45,15 @@ namespace ParkingSystem.Repository.Repositories
                     ItemsPerPage = pagination.ItemsPerPage,
                     TotalItems = totalparkingSpots
                 }
+            };
+        }
+
+        public ParkingSpotsTotals GetParkingSpotsTotals()
+        {
+            return new ParkingSpotsTotals
+            {
+                GarageTotal = ParkingSystemContext.ParkingSpots.Count(p => p.Type == ParkingSpotType.Garage),
+                OutsideTotal = ParkingSystemContext.ParkingSpots.Count(p => p.Type == ParkingSpotType.Outside)
             };
         }
     }

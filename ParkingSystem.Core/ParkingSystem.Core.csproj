@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractRepository\IDeletedReservationRepository.cs" />
+    <Compile Include="Models\ParkingSpotsTotals.cs" />
     <Compile Include="Pagination\PagedParkingSpots.cs" />
     <Compile Include="Pagination\PagedReservations.cs" />
     <Compile Include="Pagination\PagingInfo.cs" />

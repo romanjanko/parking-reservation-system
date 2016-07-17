@@ -26,7 +26,8 @@ namespace ParkingSystem.WebUI.Controllers
                 new ParkingSpotsListViewModel
                 {
                     ParkingSpots = parkingSpots.CurrentParkingSpots,
-                    PagingInfo = parkingSpots.PagingInfo
+                    PagingInfo = parkingSpots.PagingInfo,
+                    ParkingSpotsTotals = _parkingSpotService.GetParkingSpotsTotals()
                 });
         }
 
